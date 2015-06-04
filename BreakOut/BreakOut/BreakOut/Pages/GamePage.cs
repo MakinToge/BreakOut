@@ -53,7 +53,6 @@ namespace BreakOut {
             get { return lives; }
             set {
                 lives = value;
-                this.LivesSprite.Text = lives.ToString();
             }
         }
 
@@ -116,7 +115,6 @@ namespace BreakOut {
         /// <value>The level.</value>
         public int Level { get; set; }
         public ContentManager Content { get; set; }
-        public Texture2D Line { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -146,16 +144,10 @@ namespace BreakOut {
             float ballRadius = this.ScreenHeight / 27;
             float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
             float ballPositionY = this.Paddle.Position.Y - ballRadius;
-                // 1 * this.ScreenHeight / 18 - 3 * this.ScreenHeight / 27;
             this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
 
             //Prepare Launch
             this.PrepareLaunch();
-
-            //Line
-            this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            Int32[] pixel = { 0xFFFFFF };
-            this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
         }
 
         /// <summary>
@@ -163,9 +155,11 @@ namespace BreakOut {
         /// </summary>
         /// <param name="content">The content.</param>
         public override void LoadContent(ContentManager content) {
+            this.Content = content;
             Ball.LoadContent(content, "ball");
             Paddle.LoadContent(content, "paddle");
             ScoreSprite.LoadContent(content, "Arial28");
+            ChronoSprite.LoadContent(content, "Arial28");
             foreach (Brick item in this.Bricks) {
                 item.LoadContent(content, "brick");
             }
@@ -286,10 +280,6 @@ namespace BreakOut {
             foreach (Power item in this.Powers) {
                 item.Draw(spriteBatch, gameTime);
             }
-
-            spriteBatch.Begin();
-            spriteBatch.Draw(this.Line, new Rectangle(0, 4 * this.ScreenHeight / 45, this.ScreenWidth, 1), Color.White);
-            spriteBatch.End();
         }
 
         /// <summary>
