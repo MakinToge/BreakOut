@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -151,7 +152,7 @@ namespace BreakOut {
             LivesSprite.LoadContent(content, "Arial28");
             ScoreSprite.LoadContent(content, "Arial28");
             foreach (Brick item in this.Bricks) {
-                item.LoadContent(content, "brick");
+                item.LoadContent(content, item.BrickImage);
             }
             this.Content = content;
         }
@@ -335,17 +336,13 @@ namespace BreakOut {
         public void ChargeLevel(int level) {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            float brickWidth = 2 * this.ScreenHeight / 27;
-            float brickHeight = this.ScreenHeight / 27;
-            float unitX = brickWidth;
-            float unitY = brickHeight;
 
             switch (level) {
                 //Level 1
                 case 1:
                     for (int i = 0; i < 2; i++) {
                         for (int j = 0; j < 7; j++) {
-                            Brick brick = new Brick(j * 2 * unitX + unitX, i * 2 * unitY + 5 * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
+                            Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
                             this.Bricks.Add(brick);
                         }
 
@@ -357,7 +354,7 @@ namespace BreakOut {
                 case 2:
                     for (int i = 0; i < 7; i++) {
                         for (int j = 0; j < 9; j++) {
-                            Brick brick = new Brick(j * unitX + 4 * unitX, i * unitY + 4 * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
+                            Brick brick = new Brick(j + 4, i + 4, this.ScreenWidth, this.ScreenHeight, 2, PowerType.None);
                             this.Bricks.Add(brick);
                         }
 
@@ -367,13 +364,13 @@ namespace BreakOut {
                 case 3:
                     for (int i = 0; i < 2; i++) {
                         for (int j = 0; j < 12; j++) {
-                            Brick brick = new Brick(j * unitX + 2 * unitX, i * 7 * unitY + 2 * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
+                            Brick brick = new Brick(j + 2, i * 7 + 2, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
                             this.Bricks.Add(brick);
                         }
                     }
                     for (int i = 0; i < 2; i++) {
                         for (int j = 0; j < 6; j++) {
-                            Brick brick = new Brick(j * unitX + 5 * unitX, i * unitY + 5 * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight, 2, new string[] { "brick2", "brick" });
+                            Brick brick = new Brick(j + 5, i + 5, this.ScreenWidth, this.ScreenHeight, 2, PowerType.None);
                             this.Bricks.Add(brick);
                         }
                     }
@@ -383,7 +380,7 @@ namespace BreakOut {
                     for (int k = 0; k < 4; k++) {
                         for (int i = 0; i < 2; i++) {
                             for (int j = 0; j < 2; j++) {
-                                Brick brick = new Brick(j * unitX + (7 - k * 2) * unitX, i * (7 - k * 2) * unitY + (k + 2) * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
+                                Brick brick = new Brick(j + (7 - k * 2), i * (7 - k * 2) + (k + 2), this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
                                 this.Bricks.Add(brick);
                             }
                         }
@@ -391,7 +388,7 @@ namespace BreakOut {
                     for (int k = 0; k < 3; k++) {
                         for (int i = 0; i < 2; i++) {
                             for (int j = 0; j < 2; j++) {
-                                Brick brick = new Brick(j * unitX + (13 - k * 2) * unitX, i * (1 + k * 2) * unitY + (5 - k) * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
+                                Brick brick = new Brick(j + (13 - k * 2), i * (1 + k * 2) + (5 - k), this.ScreenWidth, this.ScreenHeight, 2, PowerType.None);
                                 this.Bricks.Add(brick);
                             }
                         }
@@ -427,6 +424,15 @@ namespace BreakOut {
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
-        
+        public List<Brick> LevelLoader(string levelPath)
+        {
+            if (Path.GetExtension(levelPath) != "lvl")
+            {
+                //maxX = 24   maxY = 24 (real max = 27, but place for)
+
+            }
+
+            return null;
+        }
     }
 }

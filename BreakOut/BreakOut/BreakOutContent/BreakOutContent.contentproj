@@ -112,8 +112,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="brick.png">
-      <Name>brick</Name>
+    <Compile Include="brick1.png">
+      <Name>brick1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

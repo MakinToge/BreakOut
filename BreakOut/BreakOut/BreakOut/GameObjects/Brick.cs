@@ -21,6 +21,11 @@ namespace BreakOut {
     /// Class Brick.
     /// </summary>
     public class Brick : Sprite {
+
+        public const short DEFAULT_BRICK_WIDTH = 20;
+        public const short DEFAULT_BRICK_HEIGHT = 10;
+        public const short DEFAULT_BRICK_VALUE = 100;
+
         /// <summary>
         /// Gets or sets the width of the screen.
         /// </summary>
@@ -36,57 +41,37 @@ namespace BreakOut {
         /// </summary>
         /// <value><c>true</c> if destroyed; otherwise, <c>false</c>.</value>
         public bool Destroyed { get; set; }
-        public int HitsToKill { get; set; }
+
+        private int hitsToKill;
+
+        public int HitsToKill
+        {
+            get { return hitsToKill; }
+            set {
+                hitsToKill = value;
+                this.BrickImage = string.Format("brick{0}", value);
+            }
+        }
+
+
         public int Value { get; set; }
-        public string[] BrickImages { get; set; }
+        public string BrickImage { get; set; }
         public PowerType Power { get; set; }
         public ContentManager Content { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="Brick"/> class.
         /// </summary>
-        public Brick()
-            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0) {
+        public Brick(int positionX, int positionY, float screenWidth, float screenHeight, int hitsToKill, PowerType powerType)
+        {
+            float brickWidth = screenWidth*(9/8) / 27;
+            float brickHeight = screenHeight / 27;
 
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sprite" /> class.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        public Brick(Vector2 position)
-            : this(position, Vector2.Zero, Vector2.Zero, 0) {
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sprite" /> class.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="direction">The direction.</param>
-        /// <param name="speed">The speed.</param>
-        public Brick(Vector2 position, Vector2 size, Vector2 direction, float speed) : base(position, size, direction, speed) { }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Brick"/> class.
-        /// </summary>
-        /// <param name="positionX">The position x.</param>
-        /// <param name="positionY">The position y.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
-        /// <param name="directionX">The direction x.</param>
-        /// <param name="directionY">The direction y.</param>
-        /// <param name="speed">The speed.</param>
-        /// <param name="screenWidth">Width of the screen.</param>
-        /// <param name="screenHeight">Height of the screen.</param>
-        public Brick(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed, int screenWidth, int screenHeight)
-            : this(positionX, positionY, width, height, directionX, directionY, speed,screenWidth, screenHeight,1, new string[]{"brick"}) {
-        }
-        public Brick(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed, int screenWidth, int screenHeight, int hitsToKill,string[] brickImages)
-            : base(positionX, positionY, width, height, directionX, directionY, speed) {
-            this.ScreenWidth = screenWidth;
-            this.ScreenHeight = screenHeight;
+            this.Position = new Vector2(positionX * brickWidth, positionY * brickHeight);
+            this.Size = new Vector2(brickWidth, brickHeight);
             this.Destroyed = false;
-            this.Power = PowerType.None;
+            this.Power = powerType;
             this.HitsToKill = hitsToKill;
-            this.BrickImages = brickImages;
-            this.Value = 100;
+            this.Value = DEFAULT_BRICK_VALUE;
         }
 
         public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager content, string assetName)
@@ -95,11 +80,11 @@ namespace BreakOut {
             this.Content = content;
 }
         public void Hit() {
-            this.HitsToKill -= 1;
+            this.HitsToKill = this.HitsToKill - 1;
             if (this.HitsToKill == 0) {
                 this.Destroyed = true;
             } else {
-                this.LoadContent(this.Content, this.BrickImages[this.HitsToKill - 1]);
+                this.LoadContent(this.Content, this.BrickImage);
             }
         }
 
