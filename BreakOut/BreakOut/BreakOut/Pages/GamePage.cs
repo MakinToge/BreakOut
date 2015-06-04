@@ -223,11 +223,10 @@ namespace BreakOut
         /// Updates the page.
         /// </summary>
         /// <param name="gametime">The gametime.</param>
-        public override void Update(GameTime gametime) {
-            Ball.Update(gametime,effectWall);
+          
         public override void Update(GameTime gametime)
         {
-            Ball.Update(gametime);
+            Ball.Update(gametime,effectWall);
             Paddle.Update(gametime);
             this.Chrono += gametime.ElapsedGameTime.Milliseconds;
 
