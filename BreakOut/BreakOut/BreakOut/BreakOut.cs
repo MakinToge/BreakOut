@@ -44,7 +44,8 @@ namespace BreakOut {
         /// </summary>
         GameState CurrentGameState = GameState.MainMenu;
 
-
+        public SoundEffect effectVictory;
+        public SoundEffect effectDefeat;
         /// <summary>
         /// The screen width
         /// </summary>
@@ -164,6 +165,7 @@ namespace BreakOut {
             this.PausePage.Initialize();
 
             base.Initialize();
+
         }
 
         /// <summary>
@@ -187,6 +189,10 @@ namespace BreakOut {
             this.PreviousKeyBoardState = this.CurrentKeyBoardState;
             this.CurrentMouseState = Mouse.GetState();
             this.PreviousMouseState = this.CurrentMouseState;
+
+            //Sounds
+            effectVictory = Content.Load<SoundEffect>("Sound/win");
+            effectDefeat = Content.Load<SoundEffect>("Sound/LAUGH");
 
         }
 
@@ -330,11 +336,13 @@ namespace BreakOut {
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
-                FinishPage.Title.Text = "Congratulation !";
+                effectVictory.Play();
+                FinishPage.Title.Text = "Congratulation !"; //victoire
             }
             if (GamePage.Lives == 0) {
                 CurrentGameState = GameState.Finish;
-                FinishPage.Title.Text = "Try again ?";
+                effectDefeat.Play();
+                FinishPage.Title.Text = "Try again ?"; //defaite
             }
             if (GamePage.Paused) {
                 CurrentGameState = GameState.Pause;

@@ -7,9 +7,11 @@
 // <summary></summary>
 // ***********************************************************************
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +58,11 @@ namespace BreakOut {
                 this.LivesSprite.Text = lives.ToString();
             }
         }
+
+        public SoundEffect effectBrick;
+        public SoundEffect effectPaddle;
+        public SoundEffect effectWall;
+        public SoundEffect effectLose;
 
         /// <summary>
         /// Gets or sets the lives sprite.
@@ -154,6 +161,10 @@ namespace BreakOut {
                 item.LoadContent(content, "brick");
             }
             this.Content = content;
+            effectBrick = Content.Load<SoundEffect>("Sound/hit");
+            effectPaddle = Content.Load<SoundEffect>("Sound/paddle");
+            effectWall = Content.Load<SoundEffect>("Sound/wall");
+            effectLose = Content.Load<SoundEffect>("Sound/SHOTGUNRELOAD");
         }
 
         /// <summary>
@@ -186,7 +197,7 @@ namespace BreakOut {
         /// </summary>
         /// <param name="gametime">The gametime.</param>
         public override void Update(GameTime gametime) {
-            Ball.Update(gametime);
+            Ball.Update(gametime,effectWall);
             Paddle.Update(gametime);
 
             if (!this.Launched) {
@@ -194,14 +205,19 @@ namespace BreakOut {
                 Ball.Position = new Vector2(ballPositionX, this.Ball.StartPosition.Y);
             }
 
-            if (Ball.isOut()) {
+            if (Ball.isOut()) { //par terre
                 this.Lives -= 1;
+                if (this.Lives != 0)
+                {
+                    effectLose.Play();
+                }
                 this.PrepareLaunch();
                 this.Launched = false;
             }
 
             Rectangle rectangle = new Rectangle((int)Ball.Position.X, (int)(Ball.Position.Y + (Ball.Size.Y / 2)), (int)Ball.Size.X, (int)(Ball.Size.Y / 2));
-            if (Ball.Direction.Y > 0 && Paddle.Rectangle.Intersects(rectangle)) {
+            if (Ball.Direction.Y > 0 && Paddle.Rectangle.Intersects(rectangle)) { //touche paddle
+                effectPaddle.Play();
                 Ball.Direction = this.ComputeDirectionBall(Ball, Paddle);
                 if (Ball.Speed < Ball.MaxSpeed) {
                     Ball.Speed += Ball.Acceleration;
@@ -209,7 +225,7 @@ namespace BreakOut {
             }
             
 
-            this.UpdateBrick(gametime);
+            this.UpdateBrick(gametime,effectBrick);
 
             for (int i = 0; i < this.Powers.Count; i++) {
                 this.Powers[i].Update(gametime);
@@ -293,10 +309,11 @@ namespace BreakOut {
         /// <summary>
         /// Updates the brick.
         /// </summary>
-        public void UpdateBrick(GameTime gametime) {
+        public void UpdateBrick(GameTime gametime, SoundEffect effect) {
             float x, y;
             for (int i = 0; i < this.Bricks.Count; i++) {
-                if (this.Ball.Rectangle.Intersects(this.Bricks[i].Rectangle) && !this.Bricks[i].Destroyed) {
+                if (this.Ball.Rectangle.Intersects(this.Bricks[i].Rectangle) && !this.Bricks[i].Destroyed) { // touche brique
+                    effect.Play();
                     this.Bricks[i].Hit();
                     this.Score += this.Bricks[i].Value;
                     //Ball Direction
