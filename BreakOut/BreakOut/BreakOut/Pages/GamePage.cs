@@ -129,11 +129,13 @@ namespace BreakOut {
         /// Initializes this instance.
         /// </summary>
         public override void Initialize() {
-            float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
-            float ballPositionY = this.ScreenHeight - 3 * this.ScreenHeight / 18;
-            float ballRadius = this.ScreenHeight / 18;
-            this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
             this.Paddle = new Paddle(this.Difficulty, this.ScreenWidth, this.ScreenHeight);
+            float ballRadius = this.ScreenHeight / 27;
+            float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
+            float ballPositionY = this.Paddle.Position.Y - ballRadius;
+                // 1 * this.ScreenHeight / 18 - 3 * this.ScreenHeight / 27;
+            this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
+            
 
             //Prepare Launch
             this.PrepareLaunch();
@@ -333,8 +335,8 @@ namespace BreakOut {
         public void ChargeLevel(int level) {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            float brickWidth = 2 * this.ScreenHeight / 18;
-            float brickHeight = this.ScreenHeight / 18;
+            float brickWidth = 2 * this.ScreenHeight / 27;
+            float brickHeight = this.ScreenHeight / 27;
             float unitX = brickWidth;
             float unitY = brickHeight;
 
