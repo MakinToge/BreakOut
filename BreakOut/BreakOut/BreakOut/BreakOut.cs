@@ -26,6 +26,10 @@ namespace BreakOut {
     /// </summary>
     public class BreakOut : Microsoft.Xna.Framework.Game {
 
+        public const int DEFAULT_START_LIVES = 3;
+        public const int DEFAULT_WINDOWS_WIDTH = 1280;
+        public const int DEFAULT_WINDOWS_HEIGHT = 720;
+
         /// <summary>
         /// The graphics
         /// </summary>
@@ -146,8 +150,8 @@ namespace BreakOut {
             // TODO: Add your initialization logic here
             this.IsMouseVisible = true;
             //Screen Settings
-            this.ScreenWidth = 1280;
-            this.ScreenHeight = 720;
+            this.ScreenWidth = DEFAULT_WINDOWS_WIDTH;
+            this.ScreenHeight = DEFAULT_WINDOWS_HEIGHT;
 
             //Sprites
             this.MainMenuImage = new Sprite(0, 0, this.ScreenWidth, this.ScreenHeight, 0, 0, 0);
@@ -156,7 +160,7 @@ namespace BreakOut {
             this.DifficultyPage.Initialize();
             this.LevelPage = new LevelPage(graphics, this.ScreenWidth, this.ScreenHeight);
             this.LevelPage.Initialize();
-            this.GamePage = new GamePage(graphics, this.ScreenWidth, this.ScreenHeight, 3);
+            this.GamePage = new GamePage(graphics, this.ScreenWidth, this.ScreenHeight, DEFAULT_START_LIVES);
             this.GamePage.Initialize();
             this.FinishPage = new FinishPage(graphics, this.ScreenWidth, this.ScreenHeight);
             this.FinishPage.Initialize();
