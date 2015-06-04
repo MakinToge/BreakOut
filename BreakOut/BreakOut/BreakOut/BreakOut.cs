@@ -26,6 +26,10 @@ namespace BreakOut {
     /// </summary>
     public class BreakOut : Microsoft.Xna.Framework.Game {
 
+        public const int DEFAULT_START_LIVES = 3;
+        public const int DEFAULT_WINDOWS_WIDTH = 1280;
+        public const int DEFAULT_WINDOWS_HEIGHT = 720;
+
         /// <summary>
         /// The graphics
         /// </summary>
@@ -147,8 +151,8 @@ namespace BreakOut {
             // TODO: Add your initialization logic here
             this.IsMouseVisible = true;
             //Screen Settings
-            this.ScreenWidth = 1280;
-            this.ScreenHeight = 720;
+            this.ScreenWidth = DEFAULT_WINDOWS_WIDTH;
+            this.ScreenHeight = DEFAULT_WINDOWS_HEIGHT;
 
             //Sprites
             this.MainMenuImage = new Sprite(0, 0, this.ScreenWidth, this.ScreenHeight, 0, 0, 0);
@@ -157,7 +161,7 @@ namespace BreakOut {
             this.DifficultyPage.Initialize();
             this.LevelPage = new LevelPage(graphics, this.ScreenWidth, this.ScreenHeight);
             this.LevelPage.Initialize();
-            this.GamePage = new GamePage(graphics, this.ScreenWidth, this.ScreenHeight, 3);
+            this.GamePage = new GamePage(graphics, this.ScreenWidth, this.ScreenHeight, DEFAULT_START_LIVES);
             this.GamePage.Initialize();
             this.FinishPage = new FinishPage(graphics, this.ScreenWidth, this.ScreenHeight);
             this.FinishPage.Initialize();
@@ -336,13 +340,16 @@ namespace BreakOut {
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
+                if (Math.Truncate(GamePage.Chrono / 1000) < 200) {
+                    GamePage.Score += 10 * (200 - Convert.ToInt32(GamePage.Chrono) / 1000);
+                }
+                FinishPage.Title.Text = string.Format("Congratulation ! Your Score : {0}", GamePage.Score);
                 effectVictory.Play();
-                FinishPage.Title.Text = "Congratulation !"; //victoire
             }
             if (GamePage.Lives == 0) {
                 CurrentGameState = GameState.Finish;
                 effectDefeat.Play();
-                FinishPage.Title.Text = "Try again ?"; //defaite
+                FinishPage.Title.Text = string.Format("Try again ? Your Score : {0}", GamePage.Score);
             }
             if (GamePage.Paused) {
                 CurrentGameState = GameState.Pause;
