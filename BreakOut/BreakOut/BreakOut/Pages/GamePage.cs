@@ -58,7 +58,6 @@ namespace BreakOut
             set
             {
                 lives = value;
-                this.LivesSprite.Text = lives.ToString();
             }
         }
 
@@ -66,7 +65,7 @@ namespace BreakOut
         /// Gets or sets the lives sprite.
         /// </summary>
         /// <value>The lives sprite.</value>
-        public TextSprite LivesSprite { get; set; }
+        public List<Sprite> LivesSprite { get; set; }
         public TextSprite ScoreSprite { get; set; }
         private int score;
 
@@ -83,6 +82,15 @@ namespace BreakOut
                 this.ScoreSprite.Text = score.ToString();
             }
         }
+        public TextSprite ChronoSprite { get; set; }
+        private double chrono;
+        public double Chrono {
+            get { return chrono; }
+            set { chrono = value;
+            this.ChronoSprite.Text = Math.Truncate(chrono / 1000).ToString();
+            }
+        }
+        
         /// <summary>
         /// The difficulty
         /// </summary>
@@ -129,10 +137,13 @@ namespace BreakOut
         {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            this.LivesSprite = new TextSprite(this.ScreenHeight / 18, this.ScreenHeight / 18, "", Color.White);
+            this.LivesSprite = new List<Sprite>();
+            
             this.Lives = lives;
-            this.ScoreSprite = new TextSprite(this.ScreenHeight / 18, 2 * this.ScreenHeight / 18, "", Color.White);
-            this.score = 0;
+            this.ScoreSprite = new TextSprite(29*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
+            this.Score = 0;
+            this.ChronoSprite = new TextSprite(15*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
+            this.Chrono = 0;
             this.Paused = false;
         }
 
@@ -145,10 +156,8 @@ namespace BreakOut
             float ballRadius = this.ScreenHeight / 27;
             float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
             float ballPositionY = this.Paddle.Position.Y - ballRadius;
-            // 1 * this.ScreenHeight / 18 - 3 * this.ScreenHeight / 27;
             this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
-
-
+            
             //Prepare Launch
             this.PrepareLaunch();
         }
@@ -157,17 +166,17 @@ namespace BreakOut
         /// Loads the content.
         /// </summary>
         /// <param name="content">The content.</param>
-        public override void LoadContent(ContentManager content)
-        {
+        public override void LoadContent(ContentManager content) {
+            this.Content = content;
             Ball.LoadContent(content, "ball");
             Paddle.LoadContent(content, "paddle");
-            LivesSprite.LoadContent(content, "Arial28");
             ScoreSprite.LoadContent(content, "Arial28");
-            foreach (Brick item in this.Bricks)
-            {
+            ChronoSprite.LoadContent(content, "Arial28");
+            foreach (Brick item in this.Bricks) {
                 item.LoadContent(content, item.BrickImage);
             }
-            this.Content = content;
+
+            this.CreateLifeSprite();
         }
 
         /// <summary>
@@ -182,9 +191,9 @@ namespace BreakOut
             Paddle.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
 
             if (!this.Launched
-                && (currentMouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
-                || (currentKeyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space)))
-            {
+                && ((currentMouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
+                || (currentKeyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space))
+                || (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed))) {
                 this.Launched = true;
                 this.Ball.Direction = new Vector2(0.5f, -0.5f);
             }
@@ -206,6 +215,7 @@ namespace BreakOut
         {
             Ball.Update(gametime);
             Paddle.Update(gametime);
+            this.Chrono += gametime.ElapsedGameTime.Milliseconds;
 
             if (!this.Launched)
             {
@@ -216,8 +226,10 @@ namespace BreakOut
             if (Ball.isOut())
             {
                 this.Lives -= 1;
+                this.LivesSprite.RemoveAt(this.Lives);
                 this.PrepareLaunch();
                 this.Launched = false;
+                this.Score -= 200;
             }
 
             Rectangle rectangle = new Rectangle((int)Ball.Position.X, (int)(Ball.Position.Y + (Ball.Size.Y / 2)), (int)Ball.Size.X, (int)(Ball.Size.Y / 2));
@@ -229,7 +241,7 @@ namespace BreakOut
                     Ball.Speed += Ball.Acceleration;
                 }
             }
-
+            
 
             this.UpdateBrick(gametime);
 
@@ -250,6 +262,11 @@ namespace BreakOut
             {
                 case PowerType.PlusOneLife:
                     this.Lives += 1;
+
+                    Vector2 position = this.LivesSprite.Last().Position;
+                    Vector2 size = this.LivesSprite.Last().Size;
+                    position.X += size.X;
+                    this.AddLife(position, size);
                     break;
                 case PowerType.Laser:
                     break;
@@ -272,12 +289,15 @@ namespace BreakOut
         {
             Ball.Draw(spriteBatch, gameTime);
             Paddle.Draw(spriteBatch, gameTime);
-            LivesSprite.Draw(spriteBatch, gameTime);
-            ScoreSprite.Draw(spriteBatch, gameTime);
-            foreach (Brick item in this.Bricks)
+            
+            foreach(Sprite sprite in this.LivesSprite)
             {
-                if (!item.Destroyed)
-                {
+                sprite.Draw(spriteBatch, gameTime);
+            }
+            ScoreSprite.Draw(spriteBatch, gameTime);
+            ChronoSprite.Draw(spriteBatch, gameTime);
+            foreach (Brick item in this.Bricks) {
+                if (!item.Destroyed) {
                     item.Draw(spriteBatch, gameTime);
                 }
             }
@@ -297,19 +317,10 @@ namespace BreakOut
         {
             float directionX = 0;
             float directionY = 0;
-            directionX = 1 + 1.5f * Math.Abs((ball.Position.X + ball.Size.X / 2) - (paddle.Position.X + paddle.Size.X / 2)) / (paddle.Size.X / 2);
-            if (ball.Position.X + ball.Size.X / 2 < paddle.Position.X + paddle.Size.X / 2)
-            {
-                //directionX = -(ball.Position.X + ball.Size.X / 2 - paddle.Position.X + paddle.Size.X / 2) / paddle.Size.X / 2;
+            directionX = 1 + 1.5f* Math.Abs((ball.Position.X + ball.Size.X / 2) - (paddle.Position.X + paddle.Size.X / 2)) / (paddle.Size.X / 2);
+            if (ball.Position.X + ball.Size.X / 2 < paddle.Position.X + paddle.Size.X / 2) {
                 directionX = -directionX;
             }
-            else
-            {
-                //directionX = directionX = (ball.Position.X + ball.Size.X / 2 - paddle.Position.X + paddle.Size.X / 2) / paddle.Size.X / 2;
-
-            }
-
-            //directionY = -1 * Ball.Direction.Y;
             directionY = -1;
             return Vector2.Normalize(new Vector2(directionX, directionY));
         }
@@ -350,11 +361,10 @@ namespace BreakOut
                     {
                         this.Ball.Direction = new Vector2(this.Ball.Direction.X, -1 * this.Ball.Direction.Y);
                     }
-
+                    
                     //Power Brick
-                    if (this.Bricks[i].Power != PowerType.None)
-                    {
-                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                    if (this.Bricks[i].Power != PowerType.None) {
+                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 4, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
                         power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
                         this.Powers.Add(power);
                     }
@@ -391,8 +401,6 @@ namespace BreakOut
                         }
 
                     }
-                    this.Bricks[5].Power = PowerType.Larger;
-                    this.Bricks[7].Power = PowerType.PlusOneLife;
                     break;
                 //Level 2
                 case 2:
@@ -477,8 +485,10 @@ namespace BreakOut
         {
             this.Launched = false;
             this.PrepareLaunch();
+            this.LivesSprite.Clear();
             this.Lives = 3;
             this.Score = 0;
+            this.Chrono = 0;
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
@@ -516,9 +526,30 @@ namespace BreakOut
                         }
                     }
                 }
-
             }
             return bricks;
+        }
+       /// <summary>
+        /// Add a life to the LifeSprite, ie add a heart on screen.
+        /// </summary>
+        public void AddLife(Vector2 position, Vector2 size)
+        {
+            Sprite tmp = new Sprite(position, size, Vector2.Zero, 0);
+            tmp.LoadContent(this.Content, "Power/PlusOneLife");
+            this.LivesSprite.Add(tmp);
+        }
+
+        /// <summary>
+        /// Create the LifeSprite with the adequate number of heart.
+        /// </summary>
+        public void CreateLifeSprite()
+        {
+            this.LivesSprite.Clear();
+        
+            for (int i = 0; i < this.lives; i++)
+            {
+                this.AddLife(new Vector2((i + 1) * this.ScreenHeight / 18, this.ScreenHeight / 18), new Vector2(this.ScreenHeight / 18, this.ScreenHeight / 18));
+            }
         }
     }
 }
