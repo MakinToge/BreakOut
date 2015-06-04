@@ -330,11 +330,14 @@ namespace BreakOut {
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
-                FinishPage.Title.Text = "Congratulation !";
+                if (Math.Truncate(GamePage.Chrono / 1000) < 200) {
+                    GamePage.Score += 10 * (200 - Convert.ToInt32(GamePage.Chrono) / 1000);
+                }
+                FinishPage.Title.Text = string.Format("Congratulation ! Your Score : {0}", GamePage.Score);
             }
             if (GamePage.Lives == 0) {
                 CurrentGameState = GameState.Finish;
-                FinishPage.Title.Text = "Try again ?";
+                FinishPage.Title.Text = string.Format("Try again ? Your Score : {0}", GamePage.Score);
             }
             if (GamePage.Paused) {
                 CurrentGameState = GameState.Pause;

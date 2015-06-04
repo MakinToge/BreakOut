@@ -7,6 +7,7 @@
 // <summary></summary>
 // ***********************************************************************
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,12 +111,14 @@ namespace BreakOut {
             //Keyboard
             if ((currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Q)
                 || currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A)
-                || currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+                || currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left)
+                || GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed)
                 && this.Position.X > 0) {
                 this.Direction = -Vector2.UnitX;
             }
             else if ((currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D)
-                || currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
+                || currentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right)
+                || GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed)
                 && this.Position.X < this.ScreenWidth - this.Size.X) {
                 this.Direction = Vector2.UnitX;
             }

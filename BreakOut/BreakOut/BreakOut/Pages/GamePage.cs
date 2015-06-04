@@ -76,6 +76,15 @@ namespace BreakOut {
                 this.ScoreSprite.Text = score.ToString();
             }
         }
+        public TextSprite ChronoSprite { get; set; }
+        private double chrono;
+        public double Chrono {
+            get { return chrono; }
+            set { chrono = value;
+            this.ChronoSprite.Text = Math.Truncate(chrono / 1000).ToString();
+            }
+        }
+        
         /// <summary>
         /// The difficulty
         /// </summary>
@@ -107,6 +116,7 @@ namespace BreakOut {
         /// <value>The level.</value>
         public int Level { get; set; }
         public ContentManager Content { get; set; }
+        public Texture2D Line { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -118,11 +128,15 @@ namespace BreakOut {
             : base(graphics, screenWidth, screenHeight) {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            this.LivesSprite = new TextSprite(this.ScreenHeight / 18, this.ScreenHeight / 18, "", Color.White);
+            this.LivesSprite = new TextSprite(this.ScreenHeight / 18, this.ScreenHeight / 27, "", Color.White);
             this.Lives = lives;
-            this.ScoreSprite = new TextSprite(this.ScreenHeight / 18, 2 * this.ScreenHeight / 18, "", Color.White);
-            this.score = 0;
+            this.ScoreSprite = new TextSprite(29*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
+            this.Score = 0;
+            this.ChronoSprite = new TextSprite(15*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
+            this.Chrono = 0;
             this.Paused = false;
+
+
         }
 
         /// <summary>
@@ -137,6 +151,11 @@ namespace BreakOut {
 
             //Prepare Launch
             this.PrepareLaunch();
+
+            //Line
+            this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Int32[] pixel = { 0xFFFFFF };
+            this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
         }
 
         /// <summary>
@@ -148,6 +167,7 @@ namespace BreakOut {
             Paddle.LoadContent(content, "paddle");
             LivesSprite.LoadContent(content, "Arial28");
             ScoreSprite.LoadContent(content, "Arial28");
+            ChronoSprite.LoadContent(content, "Arial28");
             foreach (Brick item in this.Bricks) {
                 item.LoadContent(content, "brick");
             }
@@ -165,8 +185,9 @@ namespace BreakOut {
             Paddle.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
 
             if (!this.Launched
-                && (currentMouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
-                || (currentKeyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space))) {
+                && ((currentMouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
+                || (currentKeyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space))
+                || (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed))) {
                 this.Launched = true;
                 this.Ball.Direction = new Vector2(0.5f, -0.5f);
             }
@@ -186,6 +207,7 @@ namespace BreakOut {
         public override void Update(GameTime gametime) {
             Ball.Update(gametime);
             Paddle.Update(gametime);
+            this.Chrono += gametime.ElapsedGameTime.Milliseconds;
 
             if (!this.Launched) {
                 float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
@@ -196,6 +218,7 @@ namespace BreakOut {
                 this.Lives -= 1;
                 this.PrepareLaunch();
                 this.Launched = false;
+                this.Score -= 200;
             }
 
             Rectangle rectangle = new Rectangle((int)Ball.Position.X, (int)(Ball.Position.Y + (Ball.Size.Y / 2)), (int)Ball.Size.X, (int)(Ball.Size.Y / 2));
@@ -245,6 +268,7 @@ namespace BreakOut {
             Paddle.Draw(spriteBatch, gameTime);
             LivesSprite.Draw(spriteBatch, gameTime);
             ScoreSprite.Draw(spriteBatch, gameTime);
+            ChronoSprite.Draw(spriteBatch, gameTime);
             foreach (Brick item in this.Bricks) {
                 if (!item.Destroyed) {
                     item.Draw(spriteBatch, gameTime);
@@ -253,6 +277,10 @@ namespace BreakOut {
             foreach (Power item in this.Powers) {
                 item.Draw(spriteBatch, gameTime);
             }
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(this.Line, new Rectangle(0, 4 * this.ScreenHeight / 45, this.ScreenWidth, 1), Color.White);
+            spriteBatch.End();
         }
 
         /// <summary>
@@ -266,15 +294,8 @@ namespace BreakOut {
             float directionY = 0;
             directionX = 1 + 1.5f* Math.Abs((ball.Position.X + ball.Size.X / 2) - (paddle.Position.X + paddle.Size.X / 2)) / (paddle.Size.X / 2);
             if (ball.Position.X + ball.Size.X / 2 < paddle.Position.X + paddle.Size.X / 2) {
-                //directionX = -(ball.Position.X + ball.Size.X / 2 - paddle.Position.X + paddle.Size.X / 2) / paddle.Size.X / 2;
                 directionX = -directionX;
             }
-            else {
-                //directionX = directionX = (ball.Position.X + ball.Size.X / 2 - paddle.Position.X + paddle.Size.X / 2) / paddle.Size.X / 2;
-
-            }
-
-            //directionY = -1 * Ball.Direction.Y;
             directionY = -1;
             return Vector2.Normalize(new Vector2(directionX, directionY));
         }
@@ -422,6 +443,7 @@ namespace BreakOut {
             this.PrepareLaunch();
             this.Lives = 3;
             this.Score = 0;
+            this.Chrono = 0;
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
