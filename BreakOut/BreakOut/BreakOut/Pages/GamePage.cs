@@ -61,7 +61,7 @@ namespace BreakOut {
         /// Gets or sets the lives sprite.
         /// </summary>
         /// <value>The lives sprite.</value>
-        public TextSprite LivesSprite { get; set; }
+        public List<Sprite> LivesSprite { get; set; }
         public TextSprite ScoreSprite { get; set; }
         private int score;
 
@@ -128,26 +128,26 @@ namespace BreakOut {
             : base(graphics, screenWidth, screenHeight) {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            this.LivesSprite = new TextSprite(this.ScreenHeight / 18, this.ScreenHeight / 27, "", Color.White);
+            this.LivesSprite = new List<Sprite>();
+            
             this.Lives = lives;
             this.ScoreSprite = new TextSprite(29*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Score = 0;
             this.ChronoSprite = new TextSprite(15*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Chrono = 0;
             this.Paused = false;
-
-
         }
 
         /// <summary>
         /// Initializes this instance.
         /// </summary>
         public override void Initialize() {
-            float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
-            float ballPositionY = this.ScreenHeight - 3 * this.ScreenHeight / 18;
-            float ballRadius = this.ScreenHeight / 18;
-            this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
             this.Paddle = new Paddle(this.Difficulty, this.ScreenWidth, this.ScreenHeight);
+            float ballRadius = this.ScreenHeight / 27;
+            float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
+            float ballPositionY = this.Paddle.Position.Y - ballRadius;
+                // 1 * this.ScreenHeight / 18 - 3 * this.ScreenHeight / 27;
+            this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
 
             //Prepare Launch
             this.PrepareLaunch();
@@ -165,13 +165,12 @@ namespace BreakOut {
         public override void LoadContent(ContentManager content) {
             Ball.LoadContent(content, "ball");
             Paddle.LoadContent(content, "paddle");
-            LivesSprite.LoadContent(content, "Arial28");
             ScoreSprite.LoadContent(content, "Arial28");
-            ChronoSprite.LoadContent(content, "Arial28");
             foreach (Brick item in this.Bricks) {
                 item.LoadContent(content, "brick");
             }
-            this.Content = content;
+
+            this.CreateLifeSprite();
         }
 
         /// <summary>
@@ -216,6 +215,7 @@ namespace BreakOut {
 
             if (Ball.isOut()) {
                 this.Lives -= 1;
+                this.LivesSprite.RemoveAt(this.Lives);
                 this.PrepareLaunch();
                 this.Launched = false;
                 this.Score -= 200;
@@ -245,6 +245,11 @@ namespace BreakOut {
             switch (powerType) {
                 case PowerType.PlusOneLife:
                     this.Lives += 1;
+
+                    Vector2 position = this.LivesSprite.Last().Position;
+                    Vector2 size = this.LivesSprite.Last().Size;
+                    position.X += size.X;
+                    this.AddLife(position, size);
                     break;
                 case PowerType.Laser:
                     break;
@@ -266,7 +271,11 @@ namespace BreakOut {
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
             Ball.Draw(spriteBatch, gameTime);
             Paddle.Draw(spriteBatch, gameTime);
-            LivesSprite.Draw(spriteBatch, gameTime);
+            
+            foreach(Sprite sprite in this.LivesSprite)
+            {
+                sprite.Draw(spriteBatch, gameTime);
+            }
             ScoreSprite.Draw(spriteBatch, gameTime);
             ChronoSprite.Draw(spriteBatch, gameTime);
             foreach (Brick item in this.Bricks) {
@@ -333,7 +342,7 @@ namespace BreakOut {
                     
                     //Power Brick
                     if (this.Bricks[i].Power != PowerType.None) {
-                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 4, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
                         power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
                         this.Powers.Add(power);
                     }
@@ -354,8 +363,8 @@ namespace BreakOut {
         public void ChargeLevel(int level) {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            float brickWidth = 2 * this.ScreenHeight / 18;
-            float brickHeight = this.ScreenHeight / 18;
+            float brickWidth = 2 * this.ScreenHeight / 27;
+            float brickHeight = this.ScreenHeight / 27;
             float unitX = brickWidth;
             float unitY = brickHeight;
 
@@ -365,12 +374,11 @@ namespace BreakOut {
                     for (int i = 0; i < 2; i++) {
                         for (int j = 0; j < 7; j++) {
                             Brick brick = new Brick(j * 2 * unitX + unitX, i * 2 * unitY + 5 * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
+                            //brick.Power = PowerType.PlusOneLife;
                             this.Bricks.Add(brick);
                         }
 
                     }
-                    this.Bricks[5].Power = PowerType.Larger;
-                    this.Bricks[7].Power = PowerType.PlusOneLife;
                     break;
                 //Level 2
                 case 2:
@@ -441,12 +449,34 @@ namespace BreakOut {
         public void Reset() {
             this.Launched = false;
             this.PrepareLaunch();
+            this.LivesSprite.Clear();
             this.Lives = 3;
             this.Score = 0;
             this.Chrono = 0;
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
+        /// <summary>
+        /// Add a life to the LifeSprite, ie add a heart on screen.
+        /// </summary>
+        public void AddLife(Vector2 position, Vector2 size)
+        {
+            Sprite tmp = new Sprite(position, size, Vector2.Zero, 0);
+            tmp.LoadContent(this.Content, "Power/PlusOneLife");
+            this.LivesSprite.Add(tmp);
+        }
+
+        /// <summary>
+        /// Create the LifeSprite with the adequate number of heart.
+        /// </summary>
+        public void CreateLifeSprite()
+        {
+            this.LivesSprite.Clear();
         
+            for (int i = 0; i < this.lives; i++)
+            {
+                this.AddLife(new Vector2((i + 1) * this.ScreenHeight / 18, this.ScreenHeight / 18), new Vector2(this.ScreenHeight / 18, this.ScreenHeight / 18));
+            }
+        }
     }
 }

@@ -134,26 +134,26 @@ namespace BreakOut {
         public void setDifficulty(Difficulty difficulty) {
             switch (difficulty) {
                 case Difficulty.Easy:
-                    this.Size = new Vector2(3 * this.ScreenWidth / 16, this.ScreenHeight / 18);
-                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 18);
-                    this.Speed = 0.75f;
+                    this.Size = new Vector2(3 * this.ScreenWidth / 27, this.ScreenHeight / 42);
+                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 42);
+                    this.Speed = 1f;
                     break;
                 case Difficulty.Normal:
-                    this.Size = new Vector2(2 * this.ScreenWidth / 16, this.ScreenHeight / 18);
-                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 18);
+                    this.Size = new Vector2(2 * this.ScreenWidth / 27, this.ScreenHeight / 42);
+                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 42);
                     this.Speed = 1f;
                     break;
                 case Difficulty.Hard:
-                    this.Size = new Vector2(1 * this.ScreenWidth / 16, this.ScreenHeight / 18);
-                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 18);
+                    this.Size = new Vector2(1 * this.ScreenWidth / 27, this.ScreenHeight / 42);
+                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 42);
                     this.Speed = 1.25f;
                     break;
                 case Difficulty.Impossible:
-                    this.Size = new Vector2(1 * this.ScreenWidth / 16, this.ScreenHeight / 18);
-                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 18);
+                    this.Size = new Vector2(1 * this.ScreenWidth / 16, this.ScreenHeight / 42);
+                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 42);
                     this.Speed = 1.5f;
                     break;
-
+                    // petits ajustements à régler
             }
         }
     }
