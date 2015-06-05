@@ -7,6 +7,7 @@
 // <summary></summary>
 // ***********************************************************************
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -27,6 +28,8 @@ namespace BreakOut {
         /// </summary>
         /// <value><c>true</c> if this instance is clicked; otherwise, <c>false</c>.</value>
         public bool IsClicked { get; set; }
+
+        public SoundEffect effectClick;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Button"/> class.
@@ -67,8 +70,16 @@ namespace BreakOut {
                 Rectangle mouseRectangle = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
                 if (mouseRectangle.Intersects(this.Rectangle)) {
                     this.IsClicked = true;
+                    effectClick.Play();
                 }
             }
+        }
+
+        public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager content, string assetName)
+        {
+            base.LoadContent(content, assetName);
+           
+            effectClick = content.Load<SoundEffect>("Sound/positive");
         }
 
     }
