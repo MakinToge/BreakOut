@@ -42,6 +42,10 @@ namespace BreakOut {
         /// <summary>
         /// The pause page
         /// </summary>
-        Pause
+        Pause,
+        /// <summary>
+        /// The score page
+        /// </summary>
+        Score
     }
 }
