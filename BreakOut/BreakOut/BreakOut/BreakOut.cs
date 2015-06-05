@@ -30,6 +30,8 @@ namespace BreakOut {
         public const int DEFAULT_START_LIVES = 3;
         public const int DEFAULT_WINDOWS_WIDTH = 1280;
         public const int DEFAULT_WINDOWS_HEIGHT = 720;
+        public const int TIME_LIMIT = 200;
+        
 
         /// <summary>
         /// The graphics
@@ -154,7 +156,6 @@ namespace BreakOut {
             //Screen Settings
             this.ScreenWidth = DEFAULT_WINDOWS_WIDTH;
             this.ScreenHeight = DEFAULT_WINDOWS_HEIGHT;
-
             //Sprites
             this.MainMenuImage = new Sprite(0, 0, this.ScreenWidth, this.ScreenHeight, 0, 0, 0);
             //Pages
@@ -234,9 +235,6 @@ namespace BreakOut {
                         || (this.CurrentKeyBoardState.IsKeyDown(Keys.Space) && this.PreviousKeyBoardState.IsKeyUp(Keys.Space))) {
                         CurrentGameState = GameState.DifficultySelection;
                     }
-                    if (this.CurrentKeyBoardState.IsKeyDown(Keys.H)) {
-                        CurrentGameState = GameState.Score;
-                    }
                     break;
                 case GameState.DifficultySelection:
                     this.UpdateDifficultySelection(gameTime);
@@ -254,9 +252,14 @@ namespace BreakOut {
                     UpdatePausePage(gameTime);
                     break;
                 case GameState.Score:
+                    ScorePage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
                     if (this.IsGoingBack()) {
-                        CurrentGameState = GameState.MainMenu;
-            }
+                        CurrentGameState = GameState.DifficultySelection;
+                    }
+                    if (ScorePage.ButtonReturn.IsClicked) {
+                        ScorePage.ButtonReturn.IsClicked = false;
+                        CurrentGameState = GameState.DifficultySelection;
+                    }
                     break;
             }
 
@@ -318,6 +321,10 @@ namespace BreakOut {
                 CurrentGameState = GameState.LevelSelection;
                 DifficultyPage.ButtonHard.IsClicked = false;
             }
+            else if (DifficultyPage.ButtonHighScores.IsClicked) {
+                CurrentGameState = GameState.Score;
+                DifficultyPage.ButtonHighScores.IsClicked = false;
+            }
 
             if (this.IsGoingBack()) {
                 CurrentGameState = GameState.MainMenu;
@@ -362,8 +369,8 @@ namespace BreakOut {
                 CurrentGameState = GameState.Finish;
                 double brick = GamePage.Score;
                 double time = 0;
-                if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < 200) {
-                    time = 10 * (200 - GamePage.Chrono.TotalSeconds);
+                if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < TIME_LIMIT) {
+                    time = 10 * (TIME_LIMIT - GamePage.Chrono.TotalSeconds);
                     brick = GamePage.Score;
                     GamePage.Score += Convert.ToInt32(time);
                 }

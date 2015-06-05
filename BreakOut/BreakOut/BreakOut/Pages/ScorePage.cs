@@ -14,6 +14,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,10 +77,11 @@ namespace BreakOut.Pages {
             this.Scores = File.ReadAllLines(fileName);
             for (int i = 0; i < this.Scores.Length; i++) {
                 string text = string.Format("Level {0} : {1}", i + 1, this.Scores[i]);
-                float x = 3 * this.ScreenWidth / 16;
-                float y = 2 * this.ScreenHeight / 9 + i * this.ScreenHeight / 18;
+                float x = 6 * this.DefaultUnitX;
+                float y = (4 + i) * this.DefaultUnitY;
                 this.ScoresSprites.Add(new TextSprite(x, y, text, Color.White));
             }
+
         }
 
         /// <summary>
@@ -87,13 +89,14 @@ namespace BreakOut.Pages {
         /// </summary>
         public override void Initialize() {
             //Texts
-            this.Title = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Score", Color.White);
+            this.Title = new TextSprite(6 * this.DefaultUnitX, 2f * this.DefaultUnitY, "Score", Color.White);
 
             //Line
             this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             Int32[] pixel = { 0xFFFFFF };
             this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
 
+            this.ButtonReturn = new Button(this.DefaultUnitX, 2f * this.DefaultUnitY, 2f * this.DefaultUnitX, this.DefaultUnitY);
         }
 
         /// <summary>
@@ -102,11 +105,14 @@ namespace BreakOut.Pages {
         /// <param name="content">The content.</param>
         public override void LoadContent(ContentManager content) {
             Title.LoadContent(content, "Arial28");
+            ButtonReturn.LoadContent(content, "return");
             foreach (TextSprite item in this.ScoresSprites) {
                 item.LoadContent(content, "Arial28");
             }
         }
-
+        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
+            ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
+        }
         /// <summary>
         /// Draws the page.
         /// </summary>
@@ -115,12 +121,12 @@ namespace BreakOut.Pages {
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
             Title.Draw(spriteBatch, gameTime);
             spriteBatch.Begin();
-            spriteBatch.Draw(this.Line, new Rectangle(6 * this.ScreenWidth / 32, 2 * this.ScreenHeight / 9, 20 * this.ScreenWidth / 32, 1), Color.White);
+            spriteBatch.Draw(this.Line, new Rectangle((int)(6 * this.DefaultUnitX), (int)(4 * this.DefaultUnitY), (int)(20 * this.DefaultUnitX), 1), Color.White);
             spriteBatch.End();
             foreach (TextSprite item in this.ScoresSprites) {
                 item.Draw(spriteBatch, gameTime);
             }
-
+            ButtonReturn.Draw(spriteBatch, gameTime);
         }
 
         /// <summary>

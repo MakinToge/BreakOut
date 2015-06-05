@@ -28,6 +28,6 @@ namespace BreakOut {
         MultiBall,
         SmallerPaddle,
         LargerPaddle,
-        Invicibility
+        Invicibility,
     }
 }

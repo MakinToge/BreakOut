@@ -158,15 +158,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Power\LargerPaddle.png">
-      <Name>LargerPaddle</Name>
-    <Compile Include="Power\Larger.png">
-      <Name>Larger</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Power\PlusOneLife.png">
       <Name>PlusOneLife</Name>
       <Importer>TextureImporter</Importer>
@@ -307,6 +298,20 @@
   <ItemGroup>
     <Compile Include="brick4.png">
       <Name>brick4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="highscores.png">
+      <Name>highscores</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Power\MultiBall.png">
+      <Name>MultiBall</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
