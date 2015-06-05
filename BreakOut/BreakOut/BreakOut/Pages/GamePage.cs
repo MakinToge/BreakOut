@@ -76,13 +76,8 @@ namespace BreakOut {
             }
         }
         public TextSprite ChronoSprite { get; set; }
-        private double chrono;
-        public double Chrono {
-            get { return chrono; }
-            set { chrono = value;
-            this.ChronoSprite.Text = Math.Truncate(chrono / 1000).ToString();
-            }
-        }
+        public Chrono Chrono { get; set; }
+        
         
         /// <summary>
         /// The difficulty
@@ -132,7 +127,7 @@ namespace BreakOut {
             this.ScoreSprite = new TextSprite(29*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Score = 0;
             this.ChronoSprite = new TextSprite(15*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
-            this.Chrono = 0;
+            this.Chrono = new Chrono();
             this.Paused = false;
         }
 
@@ -200,7 +195,8 @@ namespace BreakOut {
         public override void Update(GameTime gametime) {
             Ball.Update(gametime);
             Paddle.Update(gametime);
-            this.Chrono += gametime.ElapsedGameTime.Milliseconds;
+            this.Chrono.Milliseconds += gametime.ElapsedGameTime.Milliseconds;
+            this.ChronoSprite.Text = this.Chrono.ToString();
 
             if (!this.Launched) {
                 float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
@@ -442,7 +438,7 @@ namespace BreakOut {
             this.LivesSprite.Clear();
             this.Lives = 3;
             this.Score = 0;
-            this.Chrono = 0;
+            this.Chrono = new Chrono();
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
