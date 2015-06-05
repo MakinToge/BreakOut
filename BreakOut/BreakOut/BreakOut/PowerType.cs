@@ -19,7 +19,7 @@ namespace BreakOut {
     /// Enum PowerType
     /// </summary>
     public enum PowerType {
-        None,
+        None=0,
         PlusOneLife,
         Laser,
         Larger,
