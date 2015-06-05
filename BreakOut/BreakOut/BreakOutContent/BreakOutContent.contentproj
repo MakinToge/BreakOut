@@ -231,6 +231,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Power\MinusOneLife.png">
+      <Name>MinusOneLife</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="return.png">
       <Name>return</Name>
       <Importer>TextureImporter</Importer>

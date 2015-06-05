@@ -249,12 +249,8 @@ namespace BreakOut
             }
 
             if (Ball.isOut() && !this.isInvicible) {
-                this.Lives -= 1;
-                if (this.Lives != 0)
-                {
-                    effectLose.Play();
-                }
-                this.LivesSprite.RemoveAt(this.Lives);
+                this.removeOneLife();
+                
                 this.PrepareLaunch();
                 this.Launched = false;
                 this.Score -= 200;
@@ -296,13 +292,29 @@ namespace BreakOut
                     position.X += size.X;
                     this.AddLife(position, size);
                     break;
-                case PowerType.Laser:
+                case PowerType.MinusOneLife:
+                    this.removeOneLife();
                     break;
-                case PowerType.Larger:
+                case PowerType.OnFire:
+                    break;
+                case PowerType.SmallerBall:
+                    break;
+                case PowerType.LargerBall:
+                    break;
+                case PowerType.Faster:
+                    break;
+                case PowerType.Slower:
+                    break;
+                case PowerType.MultiBall:
+                    break;
+                case PowerType.SmallerPaddle:
+                    break;
+                case PowerType.LargerPaddle:
                     this.Paddle.Size = new Vector2(this.Paddle.Size.X + this.Paddle.Size.X / 10, this.Paddle.Size.Y);
                     break;
                 case PowerType.Invicibility:
                     this.isInvicible = true;
+                    this.timer = 0;
                     break;
                 default:
                     break;
@@ -424,7 +436,7 @@ namespace BreakOut
                         for (int j = 0; j < 7; j++)
                         {
                             Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
-                            brick.Power = PowerType.Invicibility;
+                            brick.Power = PowerType.MinusOneLife;
                             this.Bricks.Add(brick);
                         }
 
@@ -578,6 +590,16 @@ namespace BreakOut
             {
                 this.AddLife(new Vector2((i + 1) * this.ScreenHeight / 18, this.ScreenHeight / 18), new Vector2(this.ScreenHeight / 18, this.ScreenHeight / 18));
             }
+        }
+
+        public void removeOneLife()
+        {
+            this.Lives -= 1;
+            if (this.Lives != 0)
+            {
+                effectLose.Play();
+            }
+            this.LivesSprite.RemoveAt(this.Lives);
         }
     }
 }
