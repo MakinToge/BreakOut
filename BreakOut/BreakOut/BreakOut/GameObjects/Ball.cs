@@ -104,17 +104,18 @@ namespace BreakOut {
         /// Updates the ball.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        public void Update(GameTime gameTime, SoundEffect effect)
+        public void Update(GameTime gameTime, SoundEffect effect, bool isInvicible)
         { //touche mur
             //Bords Left and Right
             if ((this.Position.X <= 0 && this.Direction.X < 0) || (this.Position.X > this.ScreenWidth - this.Size.X && this.Direction.X > 0)) {
                 this.Direction = new Vector2(-1 * this.Direction.X, this.Direction.Y);
                 effect.Play();
             }//Bord Up
-            else if (this.Position.Y <= 0 && this.Direction.Y < 0) {
+            else if ((this.Position.Y <= 0 && this.Direction.Y < 0) || (this.Position.Y > this.ScreenHeight - this.Size.Y && this.Direction.Y > 0 && isInvicible)) {
                 this.Direction = new Vector2(this.Direction.X, -1 * this.Direction.Y);
                 effect.Play();
             }
+
 
             base.Update(gameTime);
         }

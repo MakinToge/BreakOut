@@ -90,13 +90,8 @@ namespace BreakOut
             }
         }
         public TextSprite ChronoSprite { get; set; }
-        private double chrono;
-        public double Chrono {
-            get { return chrono; }
-            set { chrono = value;
-            this.ChronoSprite.Text = Math.Truncate(chrono / 1000).ToString();
-            }
-        }
+        public Chrono Chrono { get; set; }
+        
         
         /// <summary>
         /// The difficulty
@@ -132,6 +127,10 @@ namespace BreakOut
         /// <value>The level.</value>
         public int Level { get; set; }
         public ContentManager Content { get; set; }
+
+        public bool isInvicible { get; set; }
+        public float timer { get; set; }
+        private short INVICIBILITYTIMER = 5;
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -150,8 +149,9 @@ namespace BreakOut
             this.ScoreSprite = new TextSprite(29*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Score = 0;
             this.ChronoSprite = new TextSprite(15*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
-            this.Chrono = 0;
+            this.Chrono = new Chrono();
             this.Paused = false;
+            this.isInvicible = false;
         }
 
         /// <summary>
@@ -226,18 +226,29 @@ namespace BreakOut
           
         public override void Update(GameTime gametime)
         {
-            Ball.Update(gametime,effectWall);
+            Ball.Update(gametime, effectWall, this.isInvicible);
             Paddle.Update(gametime);
-            this.Chrono += gametime.ElapsedGameTime.Milliseconds;
+            this.Chrono.Milliseconds += gametime.ElapsedGameTime.Milliseconds;
+            this.ChronoSprite.Text = this.Chrono.ToString();
 
-            if (!this.Launched)
+            if(this.isInvicible)
             {
+                this.timer += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+                if (this.timer >= this.INVICIBILITYTIMER)
+                {
+                    this.isInvicible = false;
+                    this.timer = 0;
+                }
+            }
+            
+
+            if (!this.Launched) {
                 float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
                 Ball.Position = new Vector2(ballPositionX, this.Ball.StartPosition.Y);
             }
 
-            if (Ball.isOut())
-            {
+            if (Ball.isOut() && !this.isInvicible) {
                 this.Lives -= 1;
                 if (this.Lives != 0)
                 {
@@ -290,7 +301,8 @@ namespace BreakOut
                 case PowerType.Larger:
                     this.Paddle.Size = new Vector2(this.Paddle.Size.X + this.Paddle.Size.X / 10, this.Paddle.Size.Y);
                     break;
-                case PowerType.Indestructible:
+                case PowerType.Invicibility:
+                    this.isInvicible = true;
                     break;
                 default:
                     break;
@@ -380,7 +392,7 @@ namespace BreakOut
                     
                     //Power Brick
                     if (this.Bricks[i].Power != PowerType.None) {
-                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 4, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
                         power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
                         this.Powers.Add(power);
                     }
@@ -413,6 +425,7 @@ namespace BreakOut
                         for (int j = 0; j < 7; j++)
                         {
                             Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
+                            brick.Power = PowerType.Invicibility;
                             this.Bricks.Add(brick);
                         }
 
@@ -504,7 +517,7 @@ namespace BreakOut
             this.LivesSprite.Clear();
             this.Lives = 3;
             this.Score = 0;
-            this.Chrono = 0;
+            this.Chrono = new Chrono();
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
@@ -545,7 +558,7 @@ namespace BreakOut
             }
             return bricks;
         }
-       /// <summary>
+        /// <summary>
         /// Add a life to the LifeSprite, ie add a heart on screen.
         /// </summary>
         public void AddLife(Vector2 position, Vector2 size)
@@ -561,7 +574,7 @@ namespace BreakOut
         public void CreateLifeSprite()
         {
             this.LivesSprite.Clear();
-        
+
             for (int i = 0; i < this.lives; i++)
             {
                 this.AddLife(new Vector2((i + 1) * this.ScreenHeight / 18, this.ScreenHeight / 18), new Vector2(this.ScreenHeight / 18, this.ScreenHeight / 18));
