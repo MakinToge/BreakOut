@@ -363,6 +363,7 @@ namespace BreakOut
                     this.Bricks[i].Hit();
                     this.Score += this.Bricks[i].Value;
                     //Ball Direction
+                    
                     x = (this.Bricks[i].Position.X + (this.Bricks[i].Size.X / 2)) - (this.Ball.Position.X + (this.Ball.Size.X / 2));
                     y = (this.Bricks[i].Position.Y + (this.Bricks[i].Size.Y / 2)) - (this.Ball.Position.Y + (this.Ball.Size.Y / 2));
                     float timeXCollision = (this.Ball.Position.X - this.Bricks[i].Position.X) / -this.Ball.Direction.X;
