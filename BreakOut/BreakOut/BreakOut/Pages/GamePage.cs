@@ -91,8 +91,8 @@ namespace BreakOut
         }
         public TextSprite ChronoSprite { get; set; }
         public Chrono Chrono { get; set; }
-
-
+        
+        
         /// <summary>
         /// The difficulty
         /// </summary>
@@ -154,7 +154,7 @@ namespace BreakOut
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
             this.LivesSprite = new List<Sprite>();
-
+            
             this.Lives = lives;
             this.ScoreSprite = new TextSprite(29 * this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Score = 0;
@@ -171,7 +171,7 @@ namespace BreakOut
         public override void Initialize()
         {
             this.Paddle = new Paddle(this.Difficulty, this.ScreenWidth, this.ScreenHeight);
-
+            
             //Prepare Launch
             this.initFirstBall();
             this.PrepareLaunch();
@@ -228,7 +228,7 @@ namespace BreakOut
                 foreach(Ball ball in this.Balls)
                 {
                     ball.Direction = new Vector2(0.5f, -0.5f);
-                }
+            }
             }
 
             if (!this.Paused
@@ -244,7 +244,7 @@ namespace BreakOut
         /// Updates the page.
         /// </summary>
         /// <param name="gametime">The gametime.</param>
-
+          
         public override void Update(GameTime gametime)
         {
             foreach(Ball ball in this.Balls)
@@ -277,7 +277,7 @@ namespace BreakOut
                     this.fireTimer = 0;
                 }
             }
-
+           
             List<Ball> toRemove = new List<Ball>();
 
             foreach (Ball ball in this.Balls)
@@ -286,7 +286,7 @@ namespace BreakOut
                 {
                     float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - ball.Size.X / 2;
                     ball.Position = new Vector2(ballPositionX, ball.StartPosition.Y);
-                }
+            }
 
                 Rectangle rectangle = new Rectangle((int)ball.Position.X, (int)(ball.Position.Y + (ball.Size.Y / 2)), (int)ball.Size.X, (int)(ball.Size.Y / 2));
                 if (ball.Direction.Y > 0 && Paddle.Rectangle.Intersects(rectangle))
@@ -303,19 +303,19 @@ namespace BreakOut
                 {
                     if (this.Balls.Count == 1)
                     {
-                        this.removeOneLife();
-
-                        this.PrepareLaunch();
-                        this.Launched = false;
-                        this.Score -= 200;
-                    }
+                this.removeOneLife();
+                
+                this.PrepareLaunch();
+                this.Launched = false;
+                this.Score -= 200;
+            }
                     else
-                    {
+                {
                         toRemove.Add(ball);
-                    }
                 }
             }
-
+            }
+            
             foreach(Ball ball in toRemove)
             {
                 this.Balls.Remove(ball);
@@ -428,7 +428,7 @@ namespace BreakOut
             }
 
             Paddle.Draw(spriteBatch, gameTime);
-
+            
             foreach (Sprite sprite in this.LivesSprite)
             {
                 sprite.Draw(spriteBatch, gameTime);
@@ -490,45 +490,45 @@ namespace BreakOut
                 {
                     if (ball.Rectangle.Intersects(this.Bricks[i].Rectangle) && !this.Bricks[i].Destroyed)
                     { // touche brique
-                        effect.Play();
-                        this.Bricks[i].Hit();
-                        this.Score += this.Bricks[i].Value;
+                    effect.Play();
+                    this.Bricks[i].Hit();
+                    this.Score += this.Bricks[i].Value;
 
-                        if (!this.ballIsOnFire)
-                        {
-                            //Ball Direction
+                    if (!this.ballIsOnFire)
+                    {
+                        //Ball Direction
                             x = (this.Bricks[i].Position.X + (this.Bricks[i].Size.X / 2)) - (ball.Position.X + (ball.Size.X / 2));
                             y = (this.Bricks[i].Position.Y + (this.Bricks[i].Size.Y / 2)) - (ball.Position.Y + (ball.Size.Y / 2));
                             float timeXCollision = (ball.Position.X - this.Bricks[i].Position.X) / -ball.Direction.X;
                             float timeYCollision = (this.Bricks[i].Position.Y - ball.Position.Y) / ball.Direction.Y;
 
-                            if ((Math.Abs(x) > Math.Abs(y)) && (timeXCollision > timeYCollision))
-                            {
-                                ball.Direction = new Vector2(-1 * ball.Direction.X, ball.Direction.Y);
-                            }
-                            else
-                            {
-                                ball.Direction = new Vector2(ball.Direction.X, -1 * ball.Direction.Y);
-                            }
-                        }
-
-                        //Ball Destroyed
-                        if (this.Bricks[i].Destroyed)
+                        if ((Math.Abs(x) > Math.Abs(y)) && (timeXCollision > timeYCollision))
                         {
-                            //Power Brick
-                            if (this.Bricks[i].Power != PowerType.None)
-                            {
-                                Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
-                                power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
-                                this.Powers.Add(power);
-                            }
-
-                            this.Bricks.RemoveAt(i);
+                                ball.Direction = new Vector2(-1 * ball.Direction.X, ball.Direction.Y);
                         }
-                        return;
+                        else
+                        {
+                                ball.Direction = new Vector2(ball.Direction.X, -1 * ball.Direction.Y);
+                        }
                     }
+                    
+                    //Ball Destroyed
+                    if (this.Bricks[i].Destroyed)
+                    {
+                        //Power Brick
+                        if (this.Bricks[i].Power != PowerType.None)
+                        {
+                            Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                            power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
+                            this.Powers.Add(power);
+                        }
+
+                        this.Bricks.RemoveAt(i);
+                    }
+                    return;
                 }
             }
+        }
         }
 
         /// <summary>

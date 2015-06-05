@@ -54,6 +54,7 @@ namespace BreakOut {
         /// </summary>
         /// <value>The button hard.</value>
         public Button ButtonHard { get; set; }
+        public Button ButtonHighScores { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="Page" /> class.
         /// </summary>
@@ -69,21 +70,24 @@ namespace BreakOut {
         /// </summary>
         public override void Initialize() {
             //Texts
-            this.SelectDifficulty = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Select Difficulty", Color.White);
-            this.ButtonReturn = new Button(this.ScreenWidth / 32, this.ScreenHeight / 9, this.ScreenWidth / 16, this.ScreenHeight / 18);
+            this.SelectDifficulty = new TextSprite(6 * this.DefaultUnitX, 2 * this.DefaultUnitY, "Select Difficulty", Color.White);
+            this.ButtonReturn = new Button(this.DefaultUnitX, 2 * this.DefaultUnitY, 2 * this.DefaultUnitX, this.DefaultUnitY);
+
             //Line
             this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             Int32[] pixel = { 0xFFFFFF };
             this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
 
             //Button Position
-            float buttonPositionX = 6 * this.ScreenWidth / 32;
-            float buttonPositionY = 3 * this.ScreenHeight / 9;
-            float buttonWidth = 6 * this.ScreenWidth / 32;
-            float buttonHeight = 3 * this.ScreenHeight / 9;
+            float buttonPositionX = 6 * this.DefaultUnitX;
+            float buttonPositionY = 6 * this.DefaultUnitY;
+            float buttonWidth = 6 * this.DefaultUnitX;
+            float buttonHeight = 6 * this.DefaultUnitY;
             this.ButtonEasy = new Button(buttonPositionX, buttonPositionY, buttonWidth, buttonHeight);
-            this.ButtonNormal = new Button(13 * this.ScreenWidth / 32, buttonPositionY, buttonWidth, buttonHeight);
-            this.ButtonHard = new Button(20 * this.ScreenWidth / 32, buttonPositionY, buttonWidth, buttonHeight);
+            this.ButtonNormal = new Button(13 * this.DefaultUnitX, buttonPositionY, buttonWidth, buttonHeight);
+            this.ButtonHard = new Button(20 * this.DefaultUnitX, buttonPositionY, buttonWidth, buttonHeight);
+
+            this.ButtonHighScores = new Button(6 * this.DefaultUnitX, 15 * this.DefaultUnitY, this.DefaultButtonWidth, this.DefaultButtonHeight);
         }
 
         /// <summary>
@@ -96,6 +100,7 @@ namespace BreakOut {
             ButtonHard.LoadContent(content, "hard");
             SelectDifficulty.LoadContent(content, "Arial28");
             ButtonReturn.LoadContent(content, "return");
+            ButtonHighScores.LoadContent(content, "highscores");
         }
 
         /// <summary>
@@ -110,6 +115,7 @@ namespace BreakOut {
             this.ButtonNormal.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ButtonHard.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
+            this.ButtonHighScores.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
         }
 
         /// <summary>
@@ -123,9 +129,10 @@ namespace BreakOut {
             ButtonNormal.Draw(spriteBatch, gameTime);
             ButtonHard.Draw(spriteBatch, gameTime);
             spriteBatch.Begin();
-            spriteBatch.Draw(this.Line, new Rectangle(6 * this.ScreenWidth / 32, 2 * this.ScreenHeight / 9, 20 * this.ScreenWidth / 32, 1), Color.White);
+            spriteBatch.Draw(this.Line, new Rectangle((int)(6 * this.DefaultUnitX), (int)(4 * this.DefaultUnitY), (int)(20 * this.DefaultUnitX), 1), Color.White);
             spriteBatch.End();
             ButtonReturn.Draw(spriteBatch, gameTime);
+            ButtonHighScores.Draw(spriteBatch, gameTime);
         }
     }
 }

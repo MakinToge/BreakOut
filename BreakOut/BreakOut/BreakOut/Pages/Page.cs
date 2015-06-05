@@ -56,12 +56,15 @@ namespace BreakOut {
                 this.Graphics.ApplyChanges();
             }
         }
+        public float DefaultUnitX { get; set; }
+        public float DefaultUnitY { get; set; }
+        public float DefaultButtonWidth { get; set; }
+        public float DefaultButtonHeight { get; set; }
         /// <summary>
         /// Gets or sets the graphics.
         /// </summary>
         /// <value>The graphics.</value>
         public GraphicsDeviceManager Graphics { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Page"/> class.
         /// </summary>
@@ -72,6 +75,11 @@ namespace BreakOut {
             this.Graphics = graphics;
             this.ScreenWidth = screenWidth;
             this.ScreenHeight = screenHeight;
+
+            this.DefaultUnitX = screenWidth / 32;
+            this.DefaultUnitY = screenHeight / 18;
+            this.DefaultButtonWidth = 10 * ScreenWidth / 16;
+            this.DefaultButtonHeight = screenHeight / 9;
         }
 
         /// <summary>
