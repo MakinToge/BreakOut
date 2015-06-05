@@ -106,6 +106,9 @@ namespace BreakOut {
         /// <value>The level.</value>
         public int Level { get; set; }
         public ContentManager Content { get; set; }
+
+        public bool isInvicible { get; set; }
+        public float InvicibilityTimer { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -123,6 +126,7 @@ namespace BreakOut {
             this.ScoreSprite = new TextSprite(this.ScreenHeight / 18, 2 * this.ScreenHeight / 18, "", Color.White);
             this.score = 0;
             this.Paused = false;
+            this.isInvicible = false;
         }
 
         /// <summary>
@@ -192,12 +196,24 @@ namespace BreakOut {
             Ball.Update(gametime);
             Paddle.Update(gametime);
 
+            if(this.isInvicible)
+            {
+                this.InvicibilityTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+                if (this.InvicibilityTimer >= 5)
+                {
+                    this.isInvicible = false;
+                    this.InvicibilityTimer = 0;
+                }
+            }
+            
+
             if (!this.Launched) {
                 float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
                 Ball.Position = new Vector2(ballPositionX, this.Ball.StartPosition.Y);
             }
 
-            if (Ball.isOut()) {
+            if (Ball.isOut() && !this.isInvicible) {
                 this.Lives -= 1;
                 this.LivesSprite.RemoveAt(this.Lives);
                 this.PrepareLaunch();
@@ -240,6 +256,7 @@ namespace BreakOut {
                     this.Paddle.Size = new Vector2(this.Paddle.Size.X + this.Paddle.Size.X / 10, this.Paddle.Size.Y);
                     break;
                 case PowerType.Indestructible:
+                    this.isInvicible = true;
                     break;
                 default:
                     break;
@@ -327,7 +344,7 @@ namespace BreakOut {
                     
                     //Power Brick
                     if (this.Bricks[i].Power != PowerType.None) {
-                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 4, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
                         power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
                         this.Powers.Add(power);
                     }
@@ -359,7 +376,7 @@ namespace BreakOut {
                     for (int i = 0; i < 2; i++) {
                         for (int j = 0; j < 7; j++) {
                             Brick brick = new Brick(j * 2 * unitX + unitX, i * 2 * unitY + 5 * unitY, brickWidth, brickHeight, 0, 0, 0, this.ScreenWidth, this.ScreenHeight);
-                            //brick.Power = PowerType.PlusOneLife;
+                            brick.Power = PowerType.Larger;
                             this.Bricks.Add(brick);
                         }
 
