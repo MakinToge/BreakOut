@@ -134,7 +134,8 @@ namespace BreakOut
         public ContentManager Content { get; set; }
 
         public bool isInvicible { get; set; }
-        public float InvicibilityTimer { get; set; }
+        public float timer { get; set; }
+        private short INVICIBILITYTIMER = 5;
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -236,12 +237,12 @@ namespace BreakOut
 
             if(this.isInvicible)
             {
-                this.InvicibilityTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+                this.timer += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-                if (this.InvicibilityTimer >= 5)
+                if (this.timer >= this.INVICIBILITYTIMER)
                 {
                     this.isInvicible = false;
-                    this.InvicibilityTimer = 0;
+                    this.timer = 0;
                 }
             }
             
