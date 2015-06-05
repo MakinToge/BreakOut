@@ -23,6 +23,6 @@ namespace BreakOut {
         PlusOneLife,
         Laser,
         Larger,
-        Indestructible
+        Invicibility
     }
 }

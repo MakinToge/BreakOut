@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreakOut", "BreakOut\BreakOut\BreakOut.csproj", "{93BC243E-D84A-4BFE-BA62-FF659B86A9E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreakOutContent", "BreakOut\BreakOutContent\BreakOutContent.contentproj", "{86E8BB2C-E5E3-43AA-BE9D-0FD9D7B3105A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F276F0FB-13DA-4349-9F95-E316EAA83E71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
