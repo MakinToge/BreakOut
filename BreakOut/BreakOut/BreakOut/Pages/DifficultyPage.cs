@@ -35,6 +35,11 @@ namespace BreakOut {
         /// <value>The line.</value>
         public Texture2D Line { get; set; }
         /// <summary>
+        /// Gets or sets the button return.
+        /// </summary>
+        /// <value>The button return.</value>
+        public Button ButtonReturn { get; set; }
+        /// <summary>
         /// Gets or sets the button easy.
         /// </summary>
         /// <value>The button easy.</value>
@@ -49,7 +54,6 @@ namespace BreakOut {
         /// </summary>
         /// <value>The button hard.</value>
         public Button ButtonHard { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Page" /> class.
         /// </summary>
@@ -66,7 +70,7 @@ namespace BreakOut {
         public override void Initialize() {
             //Texts
             this.SelectDifficulty = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Select Difficulty", Color.White);
-
+            this.ButtonReturn = new Button(this.ScreenWidth / 32, this.ScreenHeight / 9, this.ScreenWidth / 16, this.ScreenHeight / 18);
             //Line
             this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             Int32[] pixel = { 0xFFFFFF };
@@ -91,6 +95,7 @@ namespace BreakOut {
             ButtonNormal.LoadContent(content, "normal");
             ButtonHard.LoadContent(content, "hard");
             SelectDifficulty.LoadContent(content, "Arial28");
+            ButtonReturn.LoadContent(content, "return");
         }
 
         /// <summary>
@@ -104,6 +109,7 @@ namespace BreakOut {
             this.ButtonEasy.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ButtonNormal.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ButtonHard.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
+            this.ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
         }
 
         /// <summary>
@@ -119,7 +125,7 @@ namespace BreakOut {
             spriteBatch.Begin();
             spriteBatch.Draw(this.Line, new Rectangle(6 * this.ScreenWidth / 32, 2 * this.ScreenHeight / 9, 20 * this.ScreenWidth / 32, 1), Color.White);
             spriteBatch.End();
-
+            ButtonReturn.Draw(spriteBatch, gameTime);
         }
     }
 }

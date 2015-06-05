@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using BreakOut.Pages;
 
 /// <summary>
 /// The BreakOut namespace.
@@ -132,7 +133,7 @@ namespace BreakOut {
         /// </summary>
         /// <value>The pause page.</value>
         public PausePage PausePage { get; set; }
-
+        public ScorePage ScorePage { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="BreakOut"/> class.
         /// </summary>
@@ -167,9 +168,10 @@ namespace BreakOut {
             this.FinishPage.Initialize();
             this.PausePage = new PausePage(graphics, this.ScreenWidth, this.ScreenHeight);
             this.PausePage.Initialize();
+            this.ScorePage = new ScorePage(graphics, this.ScreenWidth, this.ScreenHeight, "highScores",8);
+            this.ScorePage.Initialize();
 
             base.Initialize();
-
         }
 
         /// <summary>
@@ -187,6 +189,7 @@ namespace BreakOut {
             GamePage.LoadContent(this.Content);
             FinishPage.LoadContent(this.Content);
             PausePage.LoadContent(this.Content);
+            ScorePage.LoadContent(this.Content);
 
             //Inputs
             this.CurrentKeyBoardState = Keyboard.GetState();
@@ -231,6 +234,9 @@ namespace BreakOut {
                         || (this.CurrentKeyBoardState.IsKeyDown(Keys.Space) && this.PreviousKeyBoardState.IsKeyUp(Keys.Space))) {
                         CurrentGameState = GameState.DifficultySelection;
                     }
+                    if (this.CurrentKeyBoardState.IsKeyDown(Keys.H)) {
+                        CurrentGameState = GameState.Score;
+                    }
                     break;
                 case GameState.DifficultySelection:
                     this.UpdateDifficultySelection(gameTime);
@@ -247,6 +253,11 @@ namespace BreakOut {
                 case GameState.Pause:
                     UpdatePausePage(gameTime);
                     break;
+                case GameState.Score:
+                    if (this.IsGoingBack()) {
+                        CurrentGameState = GameState.MainMenu;
+            }
+                    break;
             }
 
             base.Update(gameTime);
@@ -258,8 +269,6 @@ namespace BreakOut {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(this.BackgroundColor);
-            KeyboardState keyboardState = Keyboard.GetState();
-            MouseState mouseState = Mouse.GetState();
 
             switch (CurrentGameState) {
                 case GameState.MainMenu:
@@ -279,6 +288,9 @@ namespace BreakOut {
                     break;
                 case GameState.Pause:
                     PausePage.Draw(this.spriteBatch, gameTime);
+                    break;
+                case GameState.Score:
+                    ScorePage.Draw(this.spriteBatch, gameTime);
                     break;
             }
 
@@ -310,6 +322,10 @@ namespace BreakOut {
             if (this.IsGoingBack()) {
                 CurrentGameState = GameState.MainMenu;
             }
+            if (DifficultyPage.ButtonReturn.IsClicked) {
+                DifficultyPage.ButtonReturn.IsClicked = false;
+                CurrentGameState = GameState.MainMenu;
+            }
         }
 
         /// <summary>
@@ -318,6 +334,10 @@ namespace BreakOut {
         public void UpdateLevelSelection(GameTime gameTime) {
             LevelPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
             if (this.IsGoingBack()) {
+                CurrentGameState = GameState.DifficultySelection;
+            }
+            if (LevelPage.ButtonReturn.IsClicked) {
+                LevelPage.ButtonReturn.IsClicked = false;
                 CurrentGameState = GameState.DifficultySelection;
             }
 
@@ -340,16 +360,22 @@ namespace BreakOut {
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
-                if (Math.Truncate(GamePage.Chrono / 1000) < 200) {
-                    GamePage.Score += 10 * (200 - Convert.ToInt32(GamePage.Chrono) / 1000);
+                double brick = GamePage.Score;
+                double time = 0;
+                if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < 200) {
+                    time = 10 * (200 - GamePage.Chrono.TotalSeconds);
+                    brick = GamePage.Score;
+                    GamePage.Score += Convert.ToInt32(time);
                 }
-                FinishPage.Title.Text = string.Format("Congratulation ! Your Score : {0}", GamePage.Score);
+                FinishPage.Title.Text = string.Format("Congratulation ! Bricks : {0} Time:{1} Total : {2}", brick, time,GamePage.Score);
                 effectVictory.Play();
+                ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }
             if (GamePage.Lives == 0) {
                 CurrentGameState = GameState.Finish;
                 effectDefeat.Play();
                 FinishPage.Title.Text = string.Format("Try again ? Your Score : {0}", GamePage.Score);
+                ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }
             if (GamePage.Paused) {
                 CurrentGameState = GameState.Pause;

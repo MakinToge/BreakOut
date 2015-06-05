@@ -21,8 +21,13 @@ namespace BreakOut {
     public enum PowerType {
         None=0,
         PlusOneLife,
-        Laser,
-        Larger,
-        Indestructible
+        MinusOneLife,
+        OnFire,
+        Faster,
+        Slower,
+        MultiBall,
+        SmallerPaddle,
+        LargerPaddle,
+        Invicibility
     }
 }

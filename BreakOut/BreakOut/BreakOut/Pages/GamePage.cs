@@ -90,17 +90,9 @@ namespace BreakOut
             }
         }
         public TextSprite ChronoSprite { get; set; }
-        private double chrono;
-        public double Chrono
-        {
-            get { return chrono; }
-            set
-            {
-                chrono = value;
-                this.ChronoSprite.Text = Math.Truncate(chrono / 1000).ToString();
-            }
-        }
-
+        public Chrono Chrono { get; set; }
+        
+        
         /// <summary>
         /// The difficulty
         /// </summary>
@@ -135,6 +127,16 @@ namespace BreakOut
         /// <value>The level.</value>
         public int Level { get; set; }
         public ContentManager Content { get; set; }
+
+        public bool isInvicible { get; set; }
+        public float invicibleTimer { get; set; }
+        public bool ballIsOnFire { get; set; }
+        public float fireTimer { get; set; }
+
+        private short LIMIT_TIMER = 10;
+
+        private short MINIMUM_PADDLE_SIZE = 10;
+        private short MAXIMUM_PADDLE_SIZE = 300;
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -148,13 +150,15 @@ namespace BreakOut
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
             this.LivesSprite = new List<Sprite>();
-
+            
             this.Lives = lives;
             this.ScoreSprite = new TextSprite(29 * this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Score = 0;
-            this.ChronoSprite = new TextSprite(15 * this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
-            this.Chrono = 0;
+            this.ChronoSprite = new TextSprite(15*this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
+            this.Chrono = new Chrono();
             this.Paused = false;
+            this.isInvicible = false;
+            this.ballIsOnFire = false;
         }
 
         /// <summary>
@@ -167,7 +171,7 @@ namespace BreakOut
             float ballPositionX = this.ScreenWidth / 2 + this.ScreenHeight / 36;
             float ballPositionY = this.Paddle.Position.Y - ballRadius;
             this.Ball = new Ball(ballPositionX, ballPositionY, ballRadius, ballRadius, 1, -0.5f, 0.4f, this.ScreenWidth, this.ScreenHeight, this.Difficulty);
-
+            
             //Prepare Launch
             this.PrepareLaunch();
         }
@@ -229,27 +233,44 @@ namespace BreakOut
         /// Updates the page.
         /// </summary>
         /// <param name="gametime">The gametime.</param>
-
+          
         public override void Update(GameTime gametime)
         {
-            Ball.Update(gametime, effectWall);
+            Ball.Update(gametime, effectWall, this.isInvicible);
             Paddle.Update(gametime);
-            this.Chrono += gametime.ElapsedGameTime.Milliseconds;
+            this.Chrono.Milliseconds += gametime.ElapsedGameTime.Milliseconds;
+            this.ChronoSprite.Text = this.Chrono.ToString();
 
-            if (!this.Launched)
+            if(this.isInvicible)
             {
-                float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
-                Ball.Position = new Vector2(ballPositionX, this.Ball.StartPosition.Y);
+                this.invicibleTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+                if (this.invicibleTimer >= this.LIMIT_TIMER)
+            {
+                    this.isInvicible = false;
+                    this.invicibleTimer = 0;
+            }
             }
 
-            if (Ball.isOut())
+            if (this.ballIsOnFire)
             {
-                this.Lives -= 1;
-                if (this.Lives != 0)
+                this.fireTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+                if (this.fireTimer >= this.LIMIT_TIMER)
                 {
-                    effectLose.Play();
+                    this.ballIsOnFire = false;
+                    this.fireTimer = 0;
                 }
-                this.LivesSprite.RemoveAt(this.Lives);
+            }
+
+            if (!this.Launched) {
+                float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
+                Ball.Position = new Vector2(ballPositionX, this.Ball.StartPosition.Y);
+                }
+
+            if (Ball.isOut() && !this.isInvicible) {
+                this.removeOneLife();
+                
                 this.PrepareLaunch();
                 this.Launched = false;
                 this.Score -= 200;
@@ -265,7 +286,7 @@ namespace BreakOut
                     Ball.Speed += Ball.Acceleration;
                 }
             }
-
+            
 
             this.UpdateBrick(gametime, effectBrick);
 
@@ -282,6 +303,8 @@ namespace BreakOut
 
         public void ChargePower(PowerType powerType)
         {
+            float newSize = 0;
+
             switch (powerType)
             {
                 case PowerType.PlusOneLife:
@@ -292,12 +315,38 @@ namespace BreakOut
                     position.X += size.X;
                     this.AddLife(position, size);
                     break;
-                case PowerType.Laser:
+                case PowerType.MinusOneLife:
+                    this.removeOneLife();
                     break;
-                case PowerType.Larger:
-                    this.Paddle.Size = new Vector2(this.Paddle.Size.X + this.Paddle.Size.X / 10, this.Paddle.Size.Y);
+                case PowerType.OnFire:
+                    this.ballIsOnFire = true;
+                    this.fireTimer = 0;
                     break;
-                case PowerType.Indestructible:
+                case PowerType.Faster:
+                    this.Ball.Speed = this.Ball.MaxSpeed;
+                    break;
+                case PowerType.Slower:
+                    this.Ball.Speed = this.Ball.StartSpeed;
+                    break;
+                case PowerType.MultiBall:
+                    break;
+                case PowerType.SmallerPaddle:
+                    newSize = this.Paddle.Size.X - this.Paddle.Size.X / 10;
+                    if(newSize > MINIMUM_PADDLE_SIZE)
+                    {
+                        this.Paddle.Size = new Vector2(newSize, this.Paddle.Size.Y);
+                    }
+                    break;
+                case PowerType.LargerPaddle:
+                    newSize = this.Paddle.Size.X + this.Paddle.Size.X / 10;
+                    if(newSize < MAXIMUM_PADDLE_SIZE)
+                    {
+                        this.Paddle.Size = new Vector2(newSize, this.Paddle.Size.Y);
+                    }
+                    break;
+                case PowerType.Invicibility:
+                    this.isInvicible = true;
+                    this.invicibleTimer = 0;
                     break;
                 default:
                     break;
@@ -313,7 +362,7 @@ namespace BreakOut
         {
             Ball.Draw(spriteBatch, gameTime);
             Paddle.Draw(spriteBatch, gameTime);
-
+            
             foreach (Sprite sprite in this.LivesSprite)
             {
                 sprite.Draw(spriteBatch, gameTime);
@@ -375,7 +424,11 @@ namespace BreakOut
                     effect.Play();
                     this.Bricks[i].Hit();
                     this.Score += this.Bricks[i].Value;
+
+                    if (!this.ballIsOnFire)
+                    {
                     //Ball Direction
+                    
                     x = (this.Bricks[i].Position.X + (this.Bricks[i].Size.X / 2)) - (this.Ball.Position.X + (this.Ball.Size.X / 2));
                     y = (this.Bricks[i].Position.Y + (this.Bricks[i].Size.Y / 2)) - (this.Ball.Position.Y + (this.Ball.Size.Y / 2));
                     float timeXCollision = (this.Ball.Position.X - this.Bricks[i].Position.X) / -this.Ball.Direction.X;
@@ -389,18 +442,19 @@ namespace BreakOut
                     {
                         this.Ball.Direction = new Vector2(this.Ball.Direction.X, -1 * this.Ball.Direction.Y);
                     }
-
-                    //Power Brick
-                    if (this.Bricks[i].Power != PowerType.None)
+                    }
+                    
+                    //Ball Destroyed
+                    if (this.Bricks[i].Destroyed)
                     {
-                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 4, this.Bricks[i].Size.Y / 2, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                    //Power Brick
+                        if (this.Bricks[i].Power != PowerType.None)
+                        {
+                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
                         power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
                         this.Powers.Add(power);
                     }
 
-                    //Ball Destroyed
-                    if (this.Bricks[i].Destroyed)
-                    {
                         this.Bricks.RemoveAt(i);
                     }
                     return;
@@ -426,6 +480,7 @@ namespace BreakOut
                         for (int j = 0; j < 7; j++)
                         {
                             Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
+                            brick.Power = PowerType.OnFire;
                             this.Bricks.Add(brick);
                         }
 
@@ -438,6 +493,7 @@ namespace BreakOut
                         for (int j = 0; j < 9; j++)
                         {
                             Brick brick = new Brick(j + 4, i + 4, this.ScreenWidth, this.ScreenHeight, 2, PowerType.None);
+                            brick.Power = PowerType.OnFire;
                             this.Bricks.Add(brick);
                         }
 
@@ -517,7 +573,7 @@ namespace BreakOut
             this.LivesSprite.Clear();
             this.Lives = 3;
             this.Score = 0;
-            this.Chrono = 0;
+            this.Chrono = new Chrono();
             this.Paddle.setDifficulty(this.Difficulty);
         }
 
@@ -528,8 +584,8 @@ namespace BreakOut
 
             try
             {
-                if (Path.GetExtension(levelPath) != "lvl")
-                {
+            if (Path.GetExtension(levelPath) != "lvl")
+            {
                     level = File.ReadAllText(levelPath);
                 }
                 else
@@ -550,30 +606,30 @@ namespace BreakOut
                 return bricks;
             }
 
-            char[] columnSeparator = { ' ' };
-            char[] rowSeparator = { '\r' };
+                char[] columnSeparator = { ' ' };
+                char[] rowSeparator = { '\r' };
             string[] rows = level.Split(rowSeparator, 25);
             for (int i = 2; i < rows.Length; i++)
-            {
+                {
                 string[] columns = rows[i].Split(columnSeparator, 29);
                 for (int j = 1; j < columns.Length; j++)
-                {
-                    int brickHitPoint;
-                    try
                     {
-                        brickHitPoint = Convert.ToInt32(columns[j]);
-                    }
-                    catch (Exception)
-                    {
+                        int brickHitPoint;
+                        try
+                        {
+                            brickHitPoint = Convert.ToInt32(columns[j]);
+                        }
+                        catch (Exception)
+                        {
 
-                        brickHitPoint = 0;
-                    }
+                            brickHitPoint = 0;
+                        }
 
                     if (brickHitPoint > 0 && brickHitPoint < 8)
-                    {
+                        {
                         Brick brick = new Brick(j - 1, i - 2, this.ScreenWidth, this.ScreenHeight, brickHitPoint, PowerType.None);
-                        bricks.Add(brick);
-                    }
+                            bricks.Add(brick);
+                        }
                 }
             }
             PowerType[] powers = (PowerType[])Enum.GetValues(typeof(PowerType));
@@ -604,7 +660,7 @@ namespace BreakOut
 
             return bricks;
         }
-        /// <summary>
+       /// <summary>
         /// Add a life to the LifeSprite, ie add a heart on screen.
         /// </summary>
         public void AddLife(Vector2 position, Vector2 size)
@@ -620,11 +676,21 @@ namespace BreakOut
         public void CreateLifeSprite()
         {
             this.LivesSprite.Clear();
-
+        
             for (int i = 0; i < this.lives; i++)
             {
                 this.AddLife(new Vector2((i + 1) * this.ScreenHeight / 18, this.ScreenHeight / 18), new Vector2(this.ScreenHeight / 18, this.ScreenHeight / 18));
             }
+        }
+
+        public void removeOneLife()
+        {
+            this.Lives -= 1;
+            if (this.Lives != 0)
+            {
+                effectLose.Play();
+            }
+            this.LivesSprite.RemoveAt(this.Lives);
         }
     }
 }
