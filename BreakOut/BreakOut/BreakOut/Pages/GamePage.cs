@@ -129,8 +129,14 @@ namespace BreakOut
         public ContentManager Content { get; set; }
 
         public bool isInvicible { get; set; }
-        public float timer { get; set; }
-        private short INVICIBILITYTIMER = 5;
+        public float invicibleTimer { get; set; }
+        public bool ballIsOnFire { get; set; }
+        public float fireTimer { get; set; }
+
+        private short LIMIT_TIMER = 10;
+
+        private short MINIMUM_PADDLE_SIZE = 10;
+        private short MAXIMUM_PADDLE_SIZE = 300;
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -152,6 +158,7 @@ namespace BreakOut
             this.Chrono = new Chrono();
             this.Paused = false;
             this.isInvicible = false;
+            this.ballIsOnFire = false;
         }
 
         /// <summary>
@@ -233,16 +240,26 @@ namespace BreakOut
 
             if(this.isInvicible)
             {
-                this.timer += (float)gametime.ElapsedGameTime.TotalSeconds;
+                this.invicibleTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-                if (this.timer >= this.INVICIBILITYTIMER)
+                if (this.invicibleTimer >= this.LIMIT_TIMER)
                 {
                     this.isInvicible = false;
-                    this.timer = 0;
+                    this.invicibleTimer = 0;
                 }
             }
-            
 
+            if (this.ballIsOnFire)
+            {
+                this.fireTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+
+                if (this.fireTimer >= this.LIMIT_TIMER)
+                {
+                    this.ballIsOnFire = false;
+                    this.fireTimer = 0;
+                }
+            }
+           
             if (!this.Launched) {
                 float ballPositionX = this.Paddle.Position.X + this.Paddle.Size.X / 2 - this.Ball.Size.X / 2;
                 Ball.Position = new Vector2(ballPositionX, this.Ball.StartPosition.Y);
@@ -282,6 +299,8 @@ namespace BreakOut
 
         public void ChargePower(PowerType powerType)
         {
+            float newSize = 0;
+
             switch (powerType)
             {
                 case PowerType.PlusOneLife:
@@ -296,25 +315,34 @@ namespace BreakOut
                     this.removeOneLife();
                     break;
                 case PowerType.OnFire:
-                    break;
-                case PowerType.SmallerBall:
-                    break;
-                case PowerType.LargerBall:
+                    this.ballIsOnFire = true;
+                    this.fireTimer = 0;
                     break;
                 case PowerType.Faster:
+                    this.Ball.Speed = this.Ball.MaxSpeed;
                     break;
                 case PowerType.Slower:
+                    this.Ball.Speed = this.Ball.StartSpeed;
                     break;
                 case PowerType.MultiBall:
                     break;
                 case PowerType.SmallerPaddle:
+                    newSize = this.Paddle.Size.X - this.Paddle.Size.X / 10;
+                    if(newSize > MINIMUM_PADDLE_SIZE)
+                    {
+                        this.Paddle.Size = new Vector2(newSize, this.Paddle.Size.Y);
+                    }
                     break;
                 case PowerType.LargerPaddle:
-                    this.Paddle.Size = new Vector2(this.Paddle.Size.X + this.Paddle.Size.X / 10, this.Paddle.Size.Y);
+                    newSize = this.Paddle.Size.X + this.Paddle.Size.X / 10;
+                    if(newSize < MAXIMUM_PADDLE_SIZE)
+                    {
+                        this.Paddle.Size = new Vector2(newSize, this.Paddle.Size.Y);
+                    }
                     break;
                 case PowerType.Invicibility:
                     this.isInvicible = true;
-                    this.timer = 0;
+                    this.invicibleTimer = 0;
                     break;
                 default:
                     break;
@@ -386,31 +414,36 @@ namespace BreakOut
                     effect.Play();
                     this.Bricks[i].Hit();
                     this.Score += this.Bricks[i].Value;
-                    //Ball Direction
-                    x = (this.Bricks[i].Position.X + (this.Bricks[i].Size.X / 2)) - (this.Ball.Position.X + (this.Ball.Size.X / 2));
-                    y = (this.Bricks[i].Position.Y + (this.Bricks[i].Size.Y / 2)) - (this.Ball.Position.Y + (this.Ball.Size.Y / 2));
-                    float timeXCollision = (this.Ball.Position.X - this.Bricks[i].Position.X) / -this.Ball.Direction.X;
-                    float timeYCollision = (this.Bricks[i].Position.Y - this.Ball.Position.Y) / this.Ball.Direction.Y;
 
-                    if ((Math.Abs(x) > Math.Abs(y)) && (timeXCollision > timeYCollision))
+                    if (!this.ballIsOnFire)
                     {
-                        this.Ball.Direction = new Vector2(-1 * this.Ball.Direction.X, this.Ball.Direction.Y);
-                    }
-                    else
-                    {
-                        this.Ball.Direction = new Vector2(this.Ball.Direction.X, -1 * this.Ball.Direction.Y);
+                        //Ball Direction
+                        x = (this.Bricks[i].Position.X + (this.Bricks[i].Size.X / 2)) - (this.Ball.Position.X + (this.Ball.Size.X / 2));
+                        y = (this.Bricks[i].Position.Y + (this.Bricks[i].Size.Y / 2)) - (this.Ball.Position.Y + (this.Ball.Size.Y / 2));
+                        float timeXCollision = (this.Ball.Position.X - this.Bricks[i].Position.X) / -this.Ball.Direction.X;
+                        float timeYCollision = (this.Bricks[i].Position.Y - this.Ball.Position.Y) / this.Ball.Direction.Y;
+
+                        if ((Math.Abs(x) > Math.Abs(y)) && (timeXCollision > timeYCollision))
+                        {
+                            this.Ball.Direction = new Vector2(-1 * this.Ball.Direction.X, this.Ball.Direction.Y);
+                        }
+                        else
+                        {
+                            this.Ball.Direction = new Vector2(this.Ball.Direction.X, -1 * this.Ball.Direction.Y);
+                        }
                     }
                     
-                    //Power Brick
-                    if (this.Bricks[i].Power != PowerType.None) {
-                        Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
-                        power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
-                        this.Powers.Add(power);
-                    }
-
                     //Ball Destroyed
                     if (this.Bricks[i].Destroyed)
                     {
+                        //Power Brick
+                        if (this.Bricks[i].Power != PowerType.None)
+                        {
+                            Power power = new Power(this.Bricks[i].Position.X, this.Bricks[i].Position.Y, this.Bricks[i].Size.X / 2, this.Bricks[i].Size.Y, 0, 1, 0.2f, this.ScreenWidth, this.ScreenHeight, this.Bricks[i].Power);
+                            power.LoadContent(this.Content, "Power/" + this.Bricks[i].Power.ToString());
+                            this.Powers.Add(power);
+                        }
+
                         this.Bricks.RemoveAt(i);
                     }
                     return;
@@ -436,7 +469,7 @@ namespace BreakOut
                         for (int j = 0; j < 7; j++)
                         {
                             Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
-                            brick.Power = PowerType.MinusOneLife;
+                            brick.Power = PowerType.OnFire;
                             this.Bricks.Add(brick);
                         }
 
@@ -449,6 +482,7 @@ namespace BreakOut
                         for (int j = 0; j < 9; j++)
                         {
                             Brick brick = new Brick(j + 4, i + 4, this.ScreenWidth, this.ScreenHeight, 2, PowerType.None);
+                            brick.Power = PowerType.OnFire;
                             this.Bricks.Add(brick);
                         }
 
