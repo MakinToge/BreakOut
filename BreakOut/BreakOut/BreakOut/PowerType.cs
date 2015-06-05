@@ -23,8 +23,6 @@ namespace BreakOut {
         PlusOneLife,
         MinusOneLife,
         OnFire,
-        SmallerBall,
-        LargerBall,
         Faster,
         Slower,
         MultiBall,
