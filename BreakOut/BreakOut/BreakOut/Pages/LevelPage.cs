@@ -59,20 +59,20 @@ namespace BreakOut {
         /// </summary>
         public override void Initialize() {
             //Texts
-            this.SelectLevel = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Select Level", Color.White);
+            this.SelectLevel = new TextSprite(6 * this.DefaultUnitX, 2f * this.DefaultUnitY, "Select Level", Color.White);
 
-            this.ButtonReturn = new Button(this.ScreenWidth / 32, this.ScreenHeight / 9, this.ScreenWidth / 16, this.ScreenHeight / 18);
+            this.ButtonReturn = new Button(this.DefaultUnitX, 2f * this.DefaultUnitY, 2f * this.DefaultUnitX, this.DefaultUnitY);
             //Line
             this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             Int32[] pixel = { 0xFFFFFF };
             this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
 
             //Button Position
-            float buttonPositionX = 9 * this.ScreenWidth / 48;
-            float unitWidth = this.ScreenWidth / 48;
-            float buttonPositionY = 3 * this.ScreenHeight / 9;
-            float buttonWidth = 2 * this.ScreenWidth / 16;
-            float buttonHeight = 2 * this.ScreenHeight / 9;
+            float buttonPositionX = 9 * (32 * this.DefaultUnitX) / 48;
+            float unitWidth = (32 * this.DefaultUnitX) / 48;
+            float buttonPositionY = 6 * this.DefaultUnitY;
+            float buttonWidth = 4 * this.DefaultUnitX;
+            float buttonHeight = 4 * this.DefaultUnitY;
 
             this.Levels = new Button[] {
                 new Button(buttonPositionX, buttonPositionY, buttonWidth, buttonHeight),
@@ -124,7 +124,7 @@ namespace BreakOut {
                 item.Draw(spriteBatch, gameTime);
             }
             spriteBatch.Begin();
-            spriteBatch.Draw(this.Line, new Rectangle(6 * this.ScreenWidth / 32, 2 * this.ScreenHeight / 9, 20 * this.ScreenWidth / 32, 1), Color.White);
+            spriteBatch.Draw(this.Line, new Rectangle((int)(6 * this.DefaultUnitX), (int)(4 * this.DefaultUnitY), (int)(20 * this.DefaultUnitX), 1), Color.White);
             spriteBatch.End();
         }
     }

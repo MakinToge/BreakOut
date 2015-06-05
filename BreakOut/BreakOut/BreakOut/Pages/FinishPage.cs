@@ -54,7 +54,6 @@ namespace BreakOut {
         /// </summary>
         /// <value>The exit.</value>
         public Button Exit { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Page" /> class.
         /// </summary>
@@ -70,7 +69,7 @@ namespace BreakOut {
         /// </summary>
         public override void Initialize() {
             //Texts
-            this.Title = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Congratulation !", Color.White);
+            this.Title = new TextSprite(6 * this.DefaultUnitX, 2f * this.DefaultUnitY, "Congratulation !", Color.White);
 
             //Line
             this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
@@ -78,13 +77,12 @@ namespace BreakOut {
             this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
 
             //Button Position
-            float buttonPositionX = 6 * this.ScreenWidth / 32;
-            float buttonPositionY = this.ScreenHeight / 18;
-            float buttonWidth = 10 * this.ScreenWidth / 16;
-            float buttonHeight = this.ScreenHeight / 9;
-            this.Replay = new Button(buttonPositionX, 6 * buttonPositionY, buttonWidth, buttonHeight, 0, 0, 0);
-            this.ReturnToSelectLevel = new Button(buttonPositionX, 9 * buttonPositionY, buttonWidth, buttonHeight, 0, 0, 0);
-            this.ReturnToSelectDifficulty = new Button(buttonPositionX, 12 * buttonPositionY, buttonWidth, buttonHeight, 0, 0, 0);
+            float buttonPositionX = 6 * this.DefaultUnitX;
+            float buttonPositionY = this.DefaultUnitY;
+
+            this.Replay = new Button(buttonPositionX, 6 * buttonPositionY, this.DefaultButtonWidth, this.DefaultButtonHeight);
+            this.ReturnToSelectLevel = new Button(buttonPositionX, 9 * buttonPositionY, this.DefaultButtonWidth, this.DefaultButtonHeight);
+            this.ReturnToSelectDifficulty = new Button(buttonPositionX, 12 * buttonPositionY, this.DefaultButtonWidth, this.DefaultButtonHeight);
         }
 
         /// <summary>
@@ -124,7 +122,7 @@ namespace BreakOut {
             ReturnToSelectDifficulty.Draw(spriteBatch, gameTime);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(this.Line, new Rectangle(6 * this.ScreenWidth / 32, 2 * this.ScreenHeight / 9, 20 * this.ScreenWidth / 32, 1), Color.White);
+            spriteBatch.Draw(this.Line, new Rectangle((int)(6 * this.DefaultUnitX), (int)(4 * this.DefaultUnitY), (int)(20 * this.DefaultUnitX), 1), Color.White);
             spriteBatch.End();
 
         }
