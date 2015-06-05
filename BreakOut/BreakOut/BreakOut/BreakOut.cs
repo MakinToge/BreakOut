@@ -322,6 +322,10 @@ namespace BreakOut {
             if (this.IsGoingBack()) {
                 CurrentGameState = GameState.MainMenu;
             }
+            if (DifficultyPage.ButtonReturn.IsClicked) {
+                DifficultyPage.ButtonReturn.IsClicked = false;
+                CurrentGameState = GameState.MainMenu;
+            }
         }
 
         /// <summary>
@@ -330,6 +334,10 @@ namespace BreakOut {
         public void UpdateLevelSelection(GameTime gameTime) {
             LevelPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
             if (this.IsGoingBack()) {
+                CurrentGameState = GameState.DifficultySelection;
+            }
+            if (LevelPage.ButtonReturn.IsClicked) {
+                LevelPage.ButtonReturn.IsClicked = false;
                 CurrentGameState = GameState.DifficultySelection;
             }
 
@@ -352,10 +360,14 @@ namespace BreakOut {
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
+                double brick = GamePage.Score;
+                double time = 0;
                 if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < 200) {
-                    GamePage.Score += 10 * (200 - Convert.ToInt32(GamePage.Chrono.TotalSeconds) / 1000);
+                    time = 10 * (200 - GamePage.Chrono.TotalSeconds);
+                    brick = GamePage.Score;
+                    GamePage.Score += Convert.ToInt32(time);
                 }
-                FinishPage.Title.Text = string.Format("Congratulation ! Your Score : {0}", GamePage.Score);
+                FinishPage.Title.Text = string.Format("Congratulation ! Bricks : {0} Time:{1} Total : {2}", brick, time,GamePage.Score);
                 effectVictory.Play();
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }

@@ -38,6 +38,7 @@ namespace BreakOut.Pages {
         /// </summary>
         /// <value>The title.</value>
         public TextSprite Title { get; set; }
+        public Button ButtonReturn { get; set; }
         /// <summary>
         /// Gets or sets the scores.
         /// </summary>
