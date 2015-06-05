@@ -35,6 +35,11 @@ namespace BreakOut {
         /// <value>The line.</value>
         public Texture2D Line { get; set; }
         /// <summary>
+        /// Gets or sets the button return.
+        /// </summary>
+        /// <value>The button return.</value>
+        public Button ButtonReturn { get; set; }
+        /// <summary>
         /// Gets or sets the levels.
         /// </summary>
         /// <value>The levels.</value>
@@ -56,6 +61,7 @@ namespace BreakOut {
             //Texts
             this.SelectLevel = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Select Level", Color.White);
 
+            this.ButtonReturn = new Button(this.ScreenWidth / 32, this.ScreenHeight / 9, this.ScreenWidth / 16, this.ScreenHeight / 18);
             //Line
             this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             Int32[] pixel = { 0xFFFFFF };
@@ -86,6 +92,7 @@ namespace BreakOut {
         /// <param name="content">The content.</param>
         public override void LoadContent(ContentManager content) {
             SelectLevel.LoadContent(content, "Arial28");
+            ButtonReturn.LoadContent(content, "return");
             for (int i = 0; i < this.Levels.Length; i++) {
                 this.Levels[i].LoadContent(content, "Level/" + (i + 1));
             }
@@ -102,6 +109,7 @@ namespace BreakOut {
             foreach (Button item in Levels) {
                 item.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             }
+            ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
         }
 
         /// <summary>
@@ -111,6 +119,7 @@ namespace BreakOut {
         /// <param name="gameTime">The game time.</param>
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
             SelectLevel.Draw(spriteBatch, gameTime);
+            ButtonReturn.Draw(spriteBatch, gameTime);
             foreach (Button item in Levels) {
                 item.Draw(spriteBatch, gameTime);
             }

@@ -151,13 +151,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Power\Larger.png">
-      <Name>Larger</Name>
+    <Compile Include="brick2.png">
+      <Name>brick2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Power\Laser.png">
-      <Name>Laser</Name>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Power\LargerPaddle.png">
+      <Name>LargerPaddle</Name>
+    <Compile Include="Power\Larger.png">
+      <Name>Larger</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -226,6 +230,41 @@
   <ItemGroup>
     <Compile Include="Power\MinusOneLife.png">
       <Name>MinusOneLife</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Power\Faster.png">
+      <Name>Faster</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Power\Slower.png">
+      <Name>Slower</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Power\SmallerPaddle.png">
+      <Name>SmallerPaddle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Power\OnFire.png">
+      <Name>OnFire</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="return.png">
+      <Name>return</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
