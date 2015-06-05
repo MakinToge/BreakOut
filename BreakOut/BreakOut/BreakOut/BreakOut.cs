@@ -30,12 +30,7 @@ namespace BreakOut {
         public const int DEFAULT_START_LIVES = 3;
         public const int DEFAULT_WINDOWS_WIDTH = 1280;
         public const int DEFAULT_WINDOWS_HEIGHT = 720;
-        /*
-        public const float DEFAULT_BUTTON_WIDTH = 10 * DEFAULT_WINDOWS_WIDTH / 16;
-        public const float DEFAULT_BUTTON_HEIGHT = DEFAULT_WINDOWS_HEIGHT / 9;
-        public const float DEFAULT_UNIT_X = DEFAULT_WINDOWS_WIDTH / 32;
-        public const float DEFAULT_UNIT_Y = DEFAULT_WINDOWS_HEIGHT / 18;
-        */
+        public const int TIME_LIMIT = 200;
         
 
         /// <summary>
@@ -374,8 +369,8 @@ namespace BreakOut {
                 CurrentGameState = GameState.Finish;
                 double brick = GamePage.Score;
                 double time = 0;
-                if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < 200) {
-                    time = 10 * (200 - GamePage.Chrono.TotalSeconds);
+                if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < TIME_LIMIT) {
+                    time = 10 * (TIME_LIMIT - GamePage.Chrono.TotalSeconds);
                     brick = GamePage.Score;
                     GamePage.Score += Convert.ToInt32(time);
                 }
