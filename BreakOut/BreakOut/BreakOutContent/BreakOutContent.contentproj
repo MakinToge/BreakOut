@@ -160,7 +160,6 @@
   <ItemGroup>
     <Compile Include="Power\LargerPaddle.png">
       <Name>LargerPaddle</Name>
-    <Compile Include="Power\Larger.png">
       <Name>Larger</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
