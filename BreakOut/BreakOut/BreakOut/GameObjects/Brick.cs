@@ -80,7 +80,7 @@ namespace BreakOut {
             this.Content = content;
 }
         public void Hit() {
-            this.HitsToKill = this.HitsToKill - 1;
+            this.HitsToKill -= 1;
             if (this.HitsToKill == 0) {
                 this.Destroyed = true;
             } else {

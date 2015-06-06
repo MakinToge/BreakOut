@@ -19,7 +19,7 @@ namespace BreakOut {
     /// Enum PowerType
     /// </summary>
     public enum PowerType {
-        None,
+        None=0,
         PlusOneLife,
         MinusOneLife,
         OnFire,
@@ -28,6 +28,6 @@ namespace BreakOut {
         MultiBall,
         SmallerPaddle,
         LargerPaddle,
-        Invicibility
+        Invicibility,
     }
 }
