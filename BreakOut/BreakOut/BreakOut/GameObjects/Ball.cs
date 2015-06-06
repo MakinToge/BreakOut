@@ -195,15 +195,15 @@ namespace BreakOut
             {
                 case Difficulty.Easy:
                     this.Acceleration = 0.01f;
-                    this.MaxSpeed = 0.9f;
+                    this.MaxSpeed = 0.6f;
                     break;
                 case Difficulty.Normal:
                     this.Acceleration = 0.06f;
-                    this.MaxSpeed = 1.0f;
+                    this.MaxSpeed = 0.85f;
                     break;
                 case Difficulty.Hard:
                     this.Acceleration = 0.07f;
-                    this.MaxSpeed = 1.25f;
+                    this.MaxSpeed = 1f;
                     break;
             }
         }

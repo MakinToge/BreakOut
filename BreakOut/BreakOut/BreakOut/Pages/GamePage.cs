@@ -243,7 +243,6 @@ namespace BreakOut
                 || (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)))
             {
                 this.Launched = true;
-
                 foreach (Ball ball in this.Balls)
                 {
                     ball.Direction = new Vector2(0.5f, -0.5f);
