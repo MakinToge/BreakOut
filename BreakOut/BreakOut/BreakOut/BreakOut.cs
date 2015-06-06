@@ -393,12 +393,19 @@ namespace BreakOut {
                 CurrentGameState = GameState.Finish;
                 double brick = GamePage.Score;
                 double time = 0;
+                double difficulty = 0;
                 if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < TIME_LIMIT) {
                     time = 10 * (TIME_LIMIT - GamePage.Chrono.TotalSeconds);
                     brick = GamePage.Score;
                     GamePage.Score += Convert.ToInt32(time);
                 }
-                FinishPage.Title.Text = string.Format("Congratulation ! Bricks : {0} Time:{1} Total : {2}", brick, time,GamePage.Score);
+                if (GamePage.Difficulty == Difficulty.Normal) {
+                    difficulty = 1000;
+                }
+                else if (GamePage.Difficulty == Difficulty.Hard) {
+                    difficulty = 3500;
+                }
+                FinishPage.Title.Text = string.Format("Win! Difficulty: {0} Bricks : {1} Time:{2} Total : {3}",difficulty, brick, time,GamePage.Score);
                 effectVictory.Play();
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }
