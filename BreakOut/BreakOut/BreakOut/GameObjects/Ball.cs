@@ -70,6 +70,18 @@ namespace BreakOut
                 changed = true;
             }
         }
+
+        private const float DEFAULT_BALL_MAX_SPEED = 1.5f;
+        private const float EASY_BALL_MAX_SPEED = 0.9f;
+        private const float NORMAL_BALL_MAX_SPEED = 1.0f;
+        private const float HARD_BALL_MAX_SPEED = 1.25f;
+
+        private const float DEFAULT_BALL_ACCELERATION=0.05f;
+        private const float EASY_BALL_ACCELERATION=0.01f;
+        private const float NORMAL_BALL_ACCELERATION=0.06f;
+        private const float HARD_BALL_ACCELERATION=0.07f;
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
         /// </summary>
@@ -120,8 +132,8 @@ namespace BreakOut
             this.ScreenWidth = screenWidth;
             this.ScreenHeight = screenHeight;
 
-            this.Acceleration = 0.05f;
-            this.MaxSpeed = 1.5f;
+            this.Acceleration = DEFAULT_BALL_ACCELERATION;
+            this.MaxSpeed = DEFAULT_BALL_MAX_SPEED;
 
             this.StartPosition = this.Position;
             this.StartSpeed = this.Speed;
@@ -195,16 +207,16 @@ namespace BreakOut
             switch (difficulty)
             {
                 case Difficulty.Easy:
-                    this.Acceleration = 0.01f;
-                    this.MaxSpeed = 0.9f;
+                    this.Acceleration = EASY_BALL_ACCELERATION;
+                    this.MaxSpeed = EASY_BALL_MAX_SPEED;
                     break;
                 case Difficulty.Normal:
-                    this.Acceleration = 0.06f;
-                    this.MaxSpeed = 1.0f;
+                    this.Acceleration = NORMAL_BALL_ACCELERATION;
+                    this.MaxSpeed = NORMAL_BALL_MAX_SPEED;
                     break;
                 case Difficulty.Hard:
-                    this.Acceleration = 0.07f;
-                    this.MaxSpeed = 1.25f;
+                    this.Acceleration = NORMAL_BALL_ACCELERATION;
+                    this.MaxSpeed = NORMAL_BALL_MAX_SPEED;
                     break;
             }
         }

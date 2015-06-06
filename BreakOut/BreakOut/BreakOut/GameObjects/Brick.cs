@@ -22,9 +22,7 @@ namespace BreakOut {
     /// </summary>
     public class Brick : Sprite {
 
-        public const short DEFAULT_BRICK_WIDTH = 20;
-        public const short DEFAULT_BRICK_HEIGHT = 10;
-        public const short DEFAULT_BRICK_VALUE = 100;
+        private const short DEFAULT_BRICK_VALUE = 100;
 
         /// <summary>
         /// Gets or sets the width of the screen.

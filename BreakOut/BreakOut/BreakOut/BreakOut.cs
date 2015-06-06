@@ -27,12 +27,11 @@ namespace BreakOut {
     /// </summary>
     public class BreakOut : Microsoft.Xna.Framework.Game {
 
-        public const int DEFAULT_START_LIVES = 3;
+        public const short DEFAULT_START_LIVES = 3;
         public const int DEFAULT_WINDOWS_WIDTH = 1280;
         public const int DEFAULT_WINDOWS_HEIGHT = 720;
         public const int TIME_LIMIT = 200;
         
-
         /// <summary>
         /// The graphics
         /// </summary>
@@ -51,8 +50,8 @@ namespace BreakOut {
         /// </summary>
         GameState CurrentGameState = GameState.MainMenu;
 
-        public SoundEffect effectVictory;
-        public SoundEffect effectDefeat;
+        public SoundEffect EffectVictory { get; set; }
+        public SoundEffect EffectDefeat { get; set; }
         /// <summary>
         /// The screen width
         /// </summary>
@@ -199,8 +198,8 @@ namespace BreakOut {
             this.PreviousMouseState = this.CurrentMouseState;
 
             //Sounds
-            effectVictory = Content.Load<SoundEffect>("Sound/win");
-            effectDefeat = Content.Load<SoundEffect>("Sound/LAUGH");
+            EffectVictory = Content.Load<SoundEffect>("Sound/win");
+            EffectDefeat = Content.Load<SoundEffect>("Sound/LAUGH");
 
         }
 
@@ -375,12 +374,12 @@ namespace BreakOut {
                     GamePage.Score += Convert.ToInt32(time);
                 }
                 FinishPage.Title.Text = string.Format("Congratulation ! Bricks : {0} Time:{1} Total : {2}", brick, time,GamePage.Score);
-                effectVictory.Play();
+                EffectVictory.Play();
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }
             if (GamePage.Lives == 0) {
                 CurrentGameState = GameState.Finish;
-                effectDefeat.Play();
+                EffectDefeat.Play();
                 FinishPage.Title.Text = string.Format("Try again ? Your Score : {0}", GamePage.Score);
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }

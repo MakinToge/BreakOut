@@ -63,10 +63,10 @@ namespace BreakOut
             }
         }
 
-        public SoundEffect effectBrick;
-        public SoundEffect effectPaddle;
-        public SoundEffect effectWall;
-        public SoundEffect effectLose;
+        public SoundEffect EffectBrick{ get; set; }
+        public SoundEffect EffectPaddle { get; set; }
+        public SoundEffect EffectWall { get; set; }
+        public SoundEffect EffectLose { get; set; }
 
         /// <summary>
         /// Gets or sets the lives sprite.
@@ -150,12 +150,13 @@ namespace BreakOut
                 }
             }
         }
-        public float fireTimer { get; set; }
+        public float BallOnFireTimer { get; set; }
 
-        private short LIMIT_TIMER = 10;
+        private const short LIMIT_TIMER = 10;
+        private const short MINIMUM_PADDLE_SIZE = 10;
+        private const short MAXIMUM_PADDLE_SIZE = 300;
+        private const string DEBUG_LEVEL_FILES_PATH = "../../../../BreakOutContent/LevelScript/";
 
-        private short MINIMUM_PADDLE_SIZE = 10;
-        private short MAXIMUM_PADDLE_SIZE = 300;
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
         /// </summary>
@@ -218,10 +219,10 @@ namespace BreakOut
                 item.LoadContent(content, item.BrickImage);
             }
 
-            effectBrick = Content.Load<SoundEffect>("Sound/hit");
-            effectPaddle = Content.Load<SoundEffect>("Sound/paddle");
-            effectWall = Content.Load<SoundEffect>("Sound/wall");
-            effectLose = Content.Load<SoundEffect>("Sound/SHOTGUNRELOAD");
+            this.EffectBrick = Content.Load<SoundEffect>("Sound/hit");
+            this.EffectPaddle = Content.Load<SoundEffect>("Sound/paddle");
+            this.EffectWall = Content.Load<SoundEffect>("Sound/wall");
+            this.EffectLose = Content.Load<SoundEffect>("Sound/SHOTGUNRELOAD");
 
             this.CreateLifeSprite();
         }
@@ -268,7 +269,7 @@ namespace BreakOut
         {
             foreach (Ball ball in this.Balls)
             {
-                ball.Update(gametime, effectWall, this.isInvincible);
+                ball.Update(gametime, EffectWall, this.isInvincible);
             }
 
             Paddle.Update(gametime);
@@ -279,7 +280,7 @@ namespace BreakOut
             {
                 this.invincibleTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-                if (this.invincibleTimer >= this.LIMIT_TIMER)
+                if (this.invincibleTimer >= GamePage.LIMIT_TIMER)
                 {
                     this.isInvincible = false;
                     this.invincibleTimer = 0;
@@ -288,16 +289,16 @@ namespace BreakOut
 
             if (this.ballIsOnFire)
             {
-                this.fireTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+                this.BallOnFireTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-                if (this.fireTimer >= this.LIMIT_TIMER)
+                if (this.BallOnFireTimer >= GamePage.LIMIT_TIMER)
                 {
                     foreach (Ball ball in this.Balls)
                     {
                         ball.IsOnFire = false;
                     }
                     this.ballIsOnFire = false;
-                    this.fireTimer = 0;
+                    this.BallOnFireTimer = 0;
                 }
             }
 
@@ -313,8 +314,8 @@ namespace BreakOut
 
                 Rectangle rectangle = new Rectangle((int)ball.Position.X, (int)(ball.Position.Y + (ball.Size.Y / 2)), (int)ball.Size.X, (int)(ball.Size.Y / 2));
                 if (ball.Direction.Y > 0 && Paddle.Rectangle.Intersects(rectangle))
-                { //touche paddle
-                    effectPaddle.Play();
+                {
+                    EffectPaddle.Play();
                     ball.Direction = this.ComputeDirectionBall(ball, Paddle);
                     if (ball.Speed < ball.MaxSpeed)
                     {
@@ -326,7 +327,7 @@ namespace BreakOut
                 {
                     if (this.Balls.Count == 1)
                     {
-                        this.removeOneLife();
+                        this.RemoveOneLife();
 
                         this.PrepareLaunch();
                         this.Launched = false;
@@ -344,7 +345,7 @@ namespace BreakOut
                 this.Balls.Remove(ball);
             }
 
-            this.UpdateBrick(gametime, effectBrick);
+            this.UpdateBrick(gametime, EffectBrick);
 
             for (int i = 0; i < this.Powers.Count; i++)
             {
@@ -372,11 +373,11 @@ namespace BreakOut
                     this.AddLife(position, size);
                     break;
                 case PowerType.MinusOneLife:
-                    this.removeOneLife();
+                    this.RemoveOneLife();
                     break;
                 case PowerType.OnFire:
                     this.BallIsOnFire = true;
-                    this.fireTimer = 0;
+                    this.BallOnFireTimer = 0;
                     break;
                 case PowerType.Faster:
                     foreach (Ball ball in this.Balls)
@@ -476,7 +477,7 @@ namespace BreakOut
             if(this.isInvincible)
             {
                 this.invincibilityTimeTextSprite.Text = string.Format("Invinciblity time : {0}",
-                    (short)(this.LIMIT_TIMER - this.invincibleTimer));
+                    (short)(GamePage.LIMIT_TIMER - this.invincibleTimer));
                 this.invincibilityTimeTextSprite.Draw(spriteBatch, gameTime);
             }
         }
@@ -521,7 +522,7 @@ namespace BreakOut
             {
                 for (int i = 0; i < this.Bricks.Count; i++)
                 {
-                    if (ball.Rectangle.Intersects(this.Bricks[i].Rectangle) && !this.Bricks[i].Destroyed)
+                    if (!this.Bricks[i].Destroyed && ball.Rectangle.Intersects(this.Bricks[i].Rectangle))
                     { // touche brique
                         effect.Play();
                         this.Bricks[i].Hit();
@@ -572,7 +573,7 @@ namespace BreakOut
         {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            this.Bricks = LevelLoader(string.Format("../../../../BreakOutContent/LevelScript/{0}.lvl", level));
+            this.Bricks = LevelLoader(string.Format(DEBUG_LEVEL_FILES_PATH + "{0}.lvl", level));
         }
 
 
@@ -585,7 +586,7 @@ namespace BreakOut
             this.initFirstBall();
             this.PrepareLaunch();
             this.LivesSprite.Clear();
-            this.Lives = 3;
+            this.Lives = BreakOut.DEFAULT_START_LIVES;
             this.Score = 0;
             this.Chrono = new Chrono();
             this.Paddle.setDifficulty(this.Difficulty);
@@ -627,7 +628,7 @@ namespace BreakOut
             string[] rows = level.Split(rowSeparator, 25);
             for (int i = 2; i < rows.Length; i++)
             {
-                string[] columns = rows[i].Split(columnSeparator, 29);
+                string[] columns = rows[i].Split(columnSeparator, 28);
                 for (int j = 1; j < columns.Length; j++)
                 {
                     int brickHitPoint;
@@ -699,12 +700,12 @@ namespace BreakOut
             }
         }
 
-        public void removeOneLife()
+        public void RemoveOneLife()
         {
             this.Lives -= 1;
             if (this.Lives != 0)
             {
-                effectLose.Play();
+                EffectLose.Play();
             }
             this.LivesSprite.RemoveAt(this.Lives);
         }

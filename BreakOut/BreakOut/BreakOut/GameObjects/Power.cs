@@ -37,28 +37,7 @@ namespace BreakOut {
         public Vector2 StartPosition { get; set; }
         public PowerType PowerType { get; set; }
         public int Time { get; set; }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Ball"/> class.
-        /// </summary>
-        public Power()
-            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0) {
 
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sprite" /> class.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        public Power(Vector2 position)
-            : this(position, Vector2.Zero, Vector2.Zero, 0) {
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sprite" /> class.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="direction">The direction.</param>
-        /// <param name="speed">The speed.</param>
-        public Power(Vector2 position, Vector2 size, Vector2 direction, float speed) : base(position, size, direction, speed) { }
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
         /// </summary>
