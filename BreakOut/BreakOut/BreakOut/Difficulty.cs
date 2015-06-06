@@ -30,10 +30,6 @@ namespace BreakOut {
         /// <summary>
         /// The hard
         /// </summary>
-        Hard,
-        /// <summary>
-        /// The impossible
-        /// </summary>
-        Impossible
+        Hard
     }
 }

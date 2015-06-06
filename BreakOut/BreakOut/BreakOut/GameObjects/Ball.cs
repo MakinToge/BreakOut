@@ -195,7 +195,7 @@ namespace BreakOut
             switch (difficulty)
             {
                 case Difficulty.Easy:
-                    this.Acceleration = 0.0f;
+                    this.Acceleration = 0.01f;
                     this.MaxSpeed = 0.9f;
                     break;
                 case Difficulty.Normal:
@@ -204,13 +204,8 @@ namespace BreakOut
                     break;
                 case Difficulty.Hard:
                     this.Acceleration = 0.07f;
-                    this.MaxSpeed = 1.1f;
+                    this.MaxSpeed = 1.25f;
                     break;
-                case Difficulty.Impossible:
-                    this.Acceleration = 0.09f;
-                    this.MaxSpeed = 1.2f;
-                    break;
-
             }
         }
 

@@ -146,14 +146,8 @@ namespace BreakOut {
                 case Difficulty.Hard:
                     this.Size = new Vector2(1 * this.ScreenWidth / 27, this.ScreenHeight / 42);
                     this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 42);
-                    this.Speed = 1.25f;
+                    this.Speed = 1f;
                     break;
-                case Difficulty.Impossible:
-                    this.Size = new Vector2(1 * this.ScreenWidth / 16, this.ScreenHeight / 42);
-                    this.Position = new Vector2(this.ScreenWidth / 2 - this.ScreenWidth / 16, this.ScreenHeight - 2 * this.ScreenHeight / 42);
-                    this.Speed = 1.5f;
-                    break;
-                    // petits ajustements à régler
             }
         }
     }
