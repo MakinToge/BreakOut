@@ -46,6 +46,10 @@ namespace BreakOut {
         /// <summary>
         /// The score page
         /// </summary>
-        Score
+        Score,
+        /// <summary>
+        /// The instruction page
+        /// </summary>
+        Instruction
     }
 }

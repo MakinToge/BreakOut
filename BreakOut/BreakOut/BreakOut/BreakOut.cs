@@ -135,7 +135,12 @@ namespace BreakOut {
         /// </summary>
         /// <value>The pause page.</value>
         public PausePage PausePage { get; set; }
+        /// <summary>
+        /// Gets or sets the score page.
+        /// </summary>
+        /// <value>The score page.</value>
         public ScorePage ScorePage { get; set; }
+        public InstructionPage InstructionPage { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="BreakOut"/> class.
         /// </summary>
@@ -171,6 +176,8 @@ namespace BreakOut {
             this.PausePage.Initialize();
             this.ScorePage = new ScorePage(graphics, this.ScreenWidth, this.ScreenHeight, "highScores",8);
             this.ScorePage.Initialize();
+            this.InstructionPage = new InstructionPage(graphics, this.ScreenWidth, this.ScreenHeight);
+            this.InstructionPage.Initialize();
 
             base.Initialize();
         }
@@ -191,6 +198,7 @@ namespace BreakOut {
             FinishPage.LoadContent(this.Content);
             PausePage.LoadContent(this.Content);
             ScorePage.LoadContent(this.Content);
+            InstructionPage.LoadContent(this.Content);
 
             //Inputs
             this.CurrentKeyBoardState = Keyboard.GetState();
@@ -235,6 +243,9 @@ namespace BreakOut {
                         || (this.CurrentKeyBoardState.IsKeyDown(Keys.Space) && this.PreviousKeyBoardState.IsKeyUp(Keys.Space))) {
                         CurrentGameState = GameState.DifficultySelection;
                     }
+                    if (this.CurrentKeyBoardState.IsKeyDown(Keys.I)) {
+                        CurrentGameState = GameState.Instruction;
+                    }
                     break;
                 case GameState.DifficultySelection:
                     this.UpdateDifficultySelection(gameTime);
@@ -259,6 +270,16 @@ namespace BreakOut {
                     if (ScorePage.ButtonReturn.IsClicked) {
                         ScorePage.ButtonReturn.IsClicked = false;
                         CurrentGameState = GameState.DifficultySelection;
+                    }
+                    break;
+                case GameState.Instruction:
+                    InstructionPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
+                    if (this.IsGoingBack()) {
+                        CurrentGameState = GameState.MainMenu;
+                    }
+                    if (InstructionPage.ButtonReturn.IsClicked) {
+                        InstructionPage.ButtonReturn.IsClicked = false;
+                        CurrentGameState = GameState.MainMenu;
                     }
                     break;
             }
@@ -294,6 +315,9 @@ namespace BreakOut {
                     break;
                 case GameState.Score:
                     ScorePage.Draw(this.spriteBatch, gameTime);
+                    break;
+                case GameState.Instruction:
+                    InstructionPage.Draw(this.spriteBatch, gameTime);
                     break;
             }
 
