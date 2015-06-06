@@ -138,7 +138,12 @@ namespace BreakOut {
         /// </summary>
         /// <value>The pause page.</value>
         public PausePage PausePage { get; set; }
+        /// <summary>
+        /// Gets or sets the score page.
+        /// </summary>
+        /// <value>The score page.</value>
         public ScorePage ScorePage { get; set; }
+        public InstructionPage InstructionPage { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="BreakOut"/> class.
         /// </summary>
@@ -174,6 +179,8 @@ namespace BreakOut {
             this.PausePage.Initialize();
             this.ScorePage = new ScorePage(graphics, this.ScreenWidth, this.ScreenHeight, "highScores",8);
             this.ScorePage.Initialize();
+            this.InstructionPage = new InstructionPage(graphics, this.ScreenWidth, this.ScreenHeight);
+            this.InstructionPage.Initialize();
 
             base.Initialize();
         }
@@ -194,6 +201,7 @@ namespace BreakOut {
             FinishPage.LoadContent(this.Content);
             PausePage.LoadContent(this.Content);
             ScorePage.LoadContent(this.Content);
+            InstructionPage.LoadContent(this.Content);
 
             //Inputs
             this.CurrentKeyBoardState = Keyboard.GetState();
@@ -250,6 +258,9 @@ namespace BreakOut {
                         || (this.CurrentKeyBoardState.IsKeyDown(Keys.Space) && this.PreviousKeyBoardState.IsKeyUp(Keys.Space))) {
                         CurrentGameState = GameState.DifficultySelection;
                     }
+                    if (this.CurrentKeyBoardState.IsKeyDown(Keys.I)) {
+                        CurrentGameState = GameState.Instruction;
+                    }
                     break;
                 case GameState.DifficultySelection:
                     this.UpdateDifficultySelection(gameTime);
@@ -274,6 +285,16 @@ namespace BreakOut {
                     if (ScorePage.ButtonReturn.IsClicked) {
                         ScorePage.ButtonReturn.IsClicked = false;
                         CurrentGameState = GameState.DifficultySelection;
+                    }
+                    break;
+                case GameState.Instruction:
+                    InstructionPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
+                    if (this.IsGoingBack()) {
+                        CurrentGameState = GameState.MainMenu;
+            }
+                    if (InstructionPage.ButtonReturn.IsClicked) {
+                        InstructionPage.ButtonReturn.IsClicked = false;
+                        CurrentGameState = GameState.MainMenu;
                     }
                     break;
             }
@@ -309,6 +330,9 @@ namespace BreakOut {
                     break;
                 case GameState.Score:
                     ScorePage.Draw(this.spriteBatch, gameTime);
+                    break;
+                case GameState.Instruction:
+                    InstructionPage.Draw(this.spriteBatch, gameTime);
                     break;
             }
 
@@ -387,12 +411,20 @@ namespace BreakOut {
                 CurrentGameState = GameState.Finish;
                 double brick = GamePage.Score;
                 double time = 0;
+                double difficulty = 0;
                 if (Math.Truncate((double)GamePage.Chrono.TotalSeconds) < TIME_LIMIT) {
                     time = 10 * (TIME_LIMIT - GamePage.Chrono.TotalSeconds);
                     brick = GamePage.Score;
                     GamePage.Score += Convert.ToInt32(time);
                 }
-                FinishPage.Title.Text = string.Format("Congratulation ! Bricks : {0} Time:{1} Total : {2}", brick, time,GamePage.Score);
+                if (GamePage.Difficulty == Difficulty.Normal) {
+                    difficulty = 1000;
+                }
+                else if (GamePage.Difficulty == Difficulty.Hard) {
+                    difficulty = 3500;
+                }
+                FinishPage.Title.Text = string.Format("Win! Difficulty: {0} Bricks : {1} Time:{2} Total : {3}",difficulty, brick, time,GamePage.Score);
+
                 nyan.Stop();
                 effectVictory.Play();
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
