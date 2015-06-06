@@ -135,7 +135,21 @@ namespace BreakOut
         public float invincibleTimer { get; set; }
         public TextSprite invincibilityTimeTextSprite { get; set; }
 
-        public bool ballIsOnFire { get; set; }
+        private bool ballIsOnFire;
+        public bool BallIsOnFire {
+            get
+            {
+                return this.ballIsOnFire;
+            }
+            set
+            {
+                this.ballIsOnFire = value;
+                foreach (Ball ball in this.Balls)
+                {
+                    ball.IsOnFire = value;
+                }
+            }
+        }
         public float fireTimer { get; set; }
 
         private short LIMIT_TIMER = 10;
@@ -280,7 +294,7 @@ namespace BreakOut
                 {
                     foreach (Ball ball in this.Balls)
                     {
-                        ball.isOnFire = false;
+                        ball.IsOnFire = false;
                     }
                     this.ballIsOnFire = false;
                     this.fireTimer = 0;
@@ -361,13 +375,7 @@ namespace BreakOut
                     this.removeOneLife();
                     break;
                 case PowerType.OnFire:
-                    this.ballIsOnFire = true;
-
-                    foreach (Ball ball in this.Balls)
-                    {
-                        ball.isOnFire = true;
-                    }
-
+                    this.BallIsOnFire = true;
                     this.fireTimer = 0;
                     break;
                 case PowerType.Faster:
@@ -581,6 +589,8 @@ namespace BreakOut
             this.Score = 0;
             this.Chrono = new Chrono();
             this.Paddle.setDifficulty(this.Difficulty);
+            this.BallIsOnFire = false;
+            this.isInvincible = false;
         }
 
         public List<Brick> LevelLoader(string levelPath)
@@ -606,7 +616,6 @@ namespace BreakOut
                     for (int j = 0; j < 7; j++)
                     {
                         Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
-                        brick.Power = PowerType.Invicibility;
                         bricks.Add(brick);
                     }
                 }

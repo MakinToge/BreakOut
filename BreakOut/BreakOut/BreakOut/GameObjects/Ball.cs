@@ -56,7 +56,19 @@ namespace BreakOut
         /// <value>The start position.</value>
         public Vector2 StartPosition { get; set; }
 
-        public bool isOnFire { get; set; }
+        public bool changed { get; set; }
+        private bool isOnFire;
+        public bool IsOnFire {
+            get
+            {
+                return isOnFire;
+            }
+            set
+            {
+                isOnFire = value;
+                changed = true;
+            }
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
         /// </summary>
@@ -84,6 +96,7 @@ namespace BreakOut
             : base(position, size, direction, speed)
         {
             this.isOnFire = false;
+            this.changed = false;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
@@ -139,25 +152,35 @@ namespace BreakOut
 
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, GameTime gameTime)
         {
-            Color[] data = new Color[this.Texture.Width * this.Texture.Height];
-            this.Texture.GetData(data);
-
-            for (int i = 0; i < data.Length; i++)
+            if (this.changed == true)
             {
-                if (data[i].A >= 200)
+                Color[] data = new Color[this.Texture.Width * this.Texture.Height];
+                this.Texture.GetData(data);
+
+                for (int i = 0; i < data.Length; i++)
                 {
-                    if (this.isOnFire)
+                    if (data[i].A >= 200)
                     {
-                        data[i] = Color.Red;
-                    }
-                    else
-                    {
-                        data[i] = Color.White;
+                        if (this.isOnFire)
+                        {
+                            data[i] = Color.Red;
+                        }
+                        else
+                        {
+                            data[i] = Color.White;
+                        }
                     }
                 }
-            }
 
-            this.Texture.SetData(data);
+                try
+                {
+                    this.Texture.SetData(data);
+                }
+                catch (InvalidOperationException ioe)
+                {
+                }
+                changed = false;
+            }
 
             base.Draw(spriteBatch, gameTime);
         }
