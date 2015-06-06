@@ -31,7 +31,8 @@ namespace BreakOut {
         public const int DEFAULT_WINDOWS_WIDTH = 1280;
         public const int DEFAULT_WINDOWS_HEIGHT = 720;
         public const int TIME_LIMIT = 200;
-        
+        public const float VOLUME_ON = 0.5f;
+        public const float VOLUME_OFF = 0f;
 
         /// <summary>
         /// The graphics
@@ -217,7 +218,7 @@ namespace BreakOut {
             song = Content.Load<SoundEffect>("Sound/415384_Nyan");
             nyan = song.CreateInstance();
             nyan.IsLooped = true;
-            nyan.Volume = 0.5f;
+            nyan.Volume = VOLUME_ON;
 
         }
 
@@ -405,7 +406,17 @@ namespace BreakOut {
         /// </summary>
         public void UpdateInPlayPage(GameTime gametime) {
             GamePage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
-
+            if ((this.CurrentKeyBoardState.IsKeyDown(Keys.M) && this.PreviousKeyBoardState.IsKeyUp(Keys.M)))
+            {
+                if (nyan.Volume == VOLUME_ON)
+                {
+                    nyan.Volume = VOLUME_OFF;
+                }
+                else
+                {
+                    nyan.Volume = VOLUME_ON;
+                }
+            }
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
