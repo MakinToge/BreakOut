@@ -649,7 +649,7 @@ namespace BreakOut
                 }
             }
             PowerType[] powers = (PowerType[])Enum.GetValues(typeof(PowerType));
-            string[] probas = rows[0].Split(columnSeparator, powers.Length - 1);//powerType.None is ignored
+            string[] probas = rows[0].Split(columnSeparator, powers.Length);
             Random rand = new Random();
             short proba;
             for (int i = 0; i < probas.Length || i < powers.Length - 1; i++)

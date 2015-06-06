@@ -39,7 +39,16 @@ namespace BreakOut.Pages {
         /// </summary>
         /// <value>The title.</value>
         public TextSprite Title { get; set; }
+        /// <summary>
+        /// Gets or sets the button return.
+        /// </summary>
+        /// <value>The button return.</value>
         public Button ButtonReturn { get; set; }
+        /// <summary>
+        /// Gets or sets the button reset.
+        /// </summary>
+        /// <value>The button reset.</value>
+        public Button ButtonReset { get; set; }
         /// <summary>
         /// Gets or sets the scores.
         /// </summary>
@@ -97,6 +106,7 @@ namespace BreakOut.Pages {
             this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
 
             this.ButtonReturn = new Button(this.DefaultUnitX, 2f * this.DefaultUnitY, 2f * this.DefaultUnitX, this.DefaultUnitY);
+            this.ButtonReset = new Button(6 * this.DefaultUnitX, 15 * this.DefaultUnitY, this.DefaultButtonWidth, this.DefaultButtonHeight);
         }
 
         /// <summary>
@@ -106,12 +116,18 @@ namespace BreakOut.Pages {
         public override void LoadContent(ContentManager content) {
             Title.LoadContent(content, "Arial28");
             ButtonReturn.LoadContent(content, "return");
+            ButtonReset.LoadContent(content, "resetHighScores");
             foreach (TextSprite item in this.ScoresSprites) {
                 item.LoadContent(content, "Arial28");
             }
         }
         public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
             ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
+            ButtonReset.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
+            if (ButtonReset.IsClicked) {
+                this.ResetScore();
+                ButtonReset.IsClicked = false;
+            }
         }
         /// <summary>
         /// Draws the page.
@@ -127,6 +143,7 @@ namespace BreakOut.Pages {
                 item.Draw(spriteBatch, gameTime);
             }
             ButtonReturn.Draw(spriteBatch, gameTime);
+            ButtonReset.Draw(spriteBatch, gameTime);
         }
 
         /// <summary>
@@ -140,6 +157,18 @@ namespace BreakOut.Pages {
                 this.ScoresSprites[level - 1].Text = string.Format("Level {0} : {1}",level,score.ToString());
                 System.IO.File.WriteAllLines(this.FileName, this.Scores);
             }
+        }
+
+        /// <summary>
+        /// Resets the score.
+        /// </summary>
+        public void ResetScore() {
+            for (int i = 0; i < this.Scores.Length; i++) {
+                this.Scores[i] = "0";
+                string text = string.Format("Level {0} : 0", i + 1);
+                this.ScoresSprites[i].Text = text;
+            }
+            System.IO.File.WriteAllLines(this.FileName, this.Scores);
         }
     }
 }
