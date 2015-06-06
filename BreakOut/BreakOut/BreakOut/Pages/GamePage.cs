@@ -63,7 +63,7 @@ namespace BreakOut
             }
         }
 
-        public SoundEffect EffectBrick{ get; set; }
+        public SoundEffect EffectBrick { get; set; }
         public SoundEffect EffectPaddle { get; set; }
         public SoundEffect EffectWall { get; set; }
         public SoundEffect EffectLose { get; set; }
@@ -136,7 +136,8 @@ namespace BreakOut
         public TextSprite invincibilityTimeTextSprite { get; set; }
 
         private bool ballIsOnFire;
-        public bool BallIsOnFire {
+        public bool BallIsOnFire
+        {
             get
             {
                 return this.ballIsOnFire;
@@ -244,7 +245,6 @@ namespace BreakOut
                 || (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)))
             {
                 this.Launched = true;
-
                 foreach (Ball ball in this.Balls)
                 {
                     ball.Direction = new Vector2(0.5f, -0.5f);
@@ -468,13 +468,13 @@ namespace BreakOut
 
             ScoreSprite.Draw(spriteBatch, gameTime);
             ChronoSprite.Draw(spriteBatch, gameTime);
-            
+
             foreach (Power item in this.Powers)
             {
                 item.Draw(spriteBatch, gameTime);
             }
 
-            if(this.isInvincible)
+            if (this.isInvincible)
             {
                 this.invincibilityTimeTextSprite.Text = string.Format("Invinciblity time : {0}",
                     (short)(GamePage.LIMIT_TIMER - this.invincibleTimer));
@@ -525,7 +525,14 @@ namespace BreakOut
                     if (!this.Bricks[i].Destroyed && ball.Rectangle.Intersects(this.Bricks[i].Rectangle))
                     { // touche brique
                         effect.Play();
-                        this.Bricks[i].Hit();
+                        if (ball.IsOnFire)
+                        {
+                            this.Bricks[i].Destroyed = true;
+                        }
+                        else
+                        {
+                            this.Bricks[i].Hit();
+                        }
                         this.Score += this.Bricks[i].Value;
 
                         if (!this.ballIsOnFire)
@@ -546,7 +553,7 @@ namespace BreakOut
                             }
                         }
 
-                        //Ball Destroyed
+                        //Brick Destroyed
                         if (this.Bricks[i].Destroyed)
                         {
                             //Power Brick

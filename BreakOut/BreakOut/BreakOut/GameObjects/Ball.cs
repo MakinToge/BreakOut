@@ -72,45 +72,15 @@ namespace BreakOut
         }
 
         private const float DEFAULT_BALL_MAX_SPEED = 1.5f;
-        private const float EASY_BALL_MAX_SPEED = 0.9f;
-        private const float NORMAL_BALL_MAX_SPEED = 1.0f;
-        private const float HARD_BALL_MAX_SPEED = 1.25f;
+        private const float EASY_BALL_MAX_SPEED = 0.6f;
+        private const float NORMAL_BALL_MAX_SPEED = 0.85f;
+        private const float HARD_BALL_MAX_SPEED = 1.0f;
 
-        private const float DEFAULT_BALL_ACCELERATION=0.05f;
-        private const float EASY_BALL_ACCELERATION=0.01f;
-        private const float NORMAL_BALL_ACCELERATION=0.06f;
-        private const float HARD_BALL_ACCELERATION=0.07f;
+        private const float DEFAULT_BALL_ACCELERATION = 0.05f;
+        private const float EASY_BALL_ACCELERATION = 0.01f;
+        private const float NORMAL_BALL_ACCELERATION = 0.06f;
+        private const float HARD_BALL_ACCELERATION = 0.07f;
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Ball"/> class.
-        /// </summary>
-        public Ball()
-            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0)
-        {
-
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sprite" /> class.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        public Ball(Vector2 position)
-            : this(position, Vector2.Zero, Vector2.Zero, 0)
-        {
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sprite" /> class.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <param name="size">The size.</param>
-        /// <param name="direction">The direction.</param>
-        /// <param name="speed">The speed.</param>
-        public Ball(Vector2 position, Vector2 size, Vector2 direction, float speed)
-            : base(position, size, direction, speed)
-        {
-            this.isOnFire = false;
-            this.changed = false;
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
         /// </summary>
@@ -215,8 +185,8 @@ namespace BreakOut
                     this.MaxSpeed = NORMAL_BALL_MAX_SPEED;
                     break;
                 case Difficulty.Hard:
-                    this.Acceleration = NORMAL_BALL_ACCELERATION;
-                    this.MaxSpeed = NORMAL_BALL_MAX_SPEED;
+                    this.Acceleration = HARD_BALL_ACCELERATION;
+                    this.MaxSpeed = HARD_BALL_MAX_SPEED;
                     break;
             }
         }

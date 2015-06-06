@@ -14,11 +14,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Enum GameState
     /// </summary>
-    public enum GameState {
+    public enum GameState
+    {
         /// <summary>
         /// The main menu
         /// </summary>
@@ -46,6 +48,10 @@ namespace BreakOut {
         /// <summary>
         /// The score page
         /// </summary>
-        Score
+        Score,
+        /// <summary>
+        /// The instruction page
+        /// </summary>
+        Instruction
     }
 }

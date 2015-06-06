@@ -14,11 +14,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Enum Difficulty
     /// </summary>
-    public enum Difficulty {
+    public enum Difficulty
+    {
         /// <summary>
         /// The easy
         /// </summary>

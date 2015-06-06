@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Chrono.cs" />
     <Compile Include="GameObjects\Power.cs" />
+    <Compile Include="Pages\InstructionPage.cs" />
     <Compile Include="Pages\ScorePage.cs" />
     <Compile Include="PowerType.cs" />
     <Compile Include="Pages\PausePage.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="TextSprite.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Game.ico" />
+    <Compile Include="Game.ico" />
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>

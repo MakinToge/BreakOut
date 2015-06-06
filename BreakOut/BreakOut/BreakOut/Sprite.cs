@@ -18,11 +18,13 @@ using Microsoft.Xna.Framework.Input;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class Sprite.
     /// </summary>
-    public class Sprite {
+    public class Sprite
+    {
         /// <summary>
         /// Gets or sets the texture.
         /// </summary>
@@ -52,8 +54,10 @@ namespace BreakOut {
         /// Gets the rectangle.
         /// </summary>
         /// <value>The rectangle.</value>
-        public Rectangle Rectangle {
-            get {
+        public Rectangle Rectangle
+        {
+            get
+            {
                 return new Rectangle(Convert.ToInt32(this.Position.X), Convert.ToInt32(this.Position.Y), Convert.ToInt32(this.Size.X), Convert.ToInt32(this.Size.Y));
             }
         }
@@ -62,14 +66,16 @@ namespace BreakOut {
         /// Initializes a new instance of the <see cref="Sprite"/> class.
         /// </summary>
         public Sprite()
-            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0) {
+            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0)
+        {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Sprite"/> class.
         /// </summary>
         /// <param name="position">The position.</param>
         public Sprite(Vector2 position)
-            : this(position, Vector2.Zero, Vector2.Zero, 0) {
+            : this(position, Vector2.Zero, Vector2.Zero, 0)
+        {
             this.Position = position;
         }
         /// <summary>
@@ -79,7 +85,8 @@ namespace BreakOut {
         /// <param name="size">The size.</param>
         /// <param name="direction">The direction.</param>
         /// <param name="speed">The speed.</param>
-        public Sprite(Vector2 position, Vector2 size, Vector2 direction, float speed) {
+        public Sprite(Vector2 position, Vector2 size, Vector2 direction, float speed)
+        {
             this.Position = position;
             this.Size = size;
             this.Direction = direction;
@@ -95,7 +102,8 @@ namespace BreakOut {
         /// <param name="directionX">The direction x.</param>
         /// <param name="directionY">The direction y.</param>
         /// <param name="speed">The speed.</param>
-        public Sprite(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed) {
+        public Sprite(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed)
+        {
             this.Position = new Vector2(positionX, positionY);
             this.Size = new Vector2(width, height);
             this.Direction = Vector2.Normalize(new Vector2(directionX, directionY));
@@ -107,7 +115,8 @@ namespace BreakOut {
         /// </summary>
         /// <param name="X">The x.</param>
         /// <param name="Y">The y.</param>
-        public void SetPosition(float X, float Y) {
+        public void SetPosition(float X, float Y)
+        {
             this.Position = new Vector2(X, Y);
         }
         /// <summary>
@@ -115,13 +124,15 @@ namespace BreakOut {
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public void SetSize(float width, float height) {
+        public void SetSize(float width, float height)
+        {
             this.Size = new Vector2(width, height);
         }
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public virtual void Initialize() {
+        public virtual void Initialize()
+        {
             this.Position = Vector2.Zero;
             this.Direction = Vector2.Zero;
             this.Speed = 0;
@@ -131,14 +142,16 @@ namespace BreakOut {
         /// </summary>
         /// <param name="content">The content.</param>
         /// <param name="assetName">Name of the asset.</param>
-        public virtual void LoadContent(ContentManager content, string assetName) {
+        public virtual void LoadContent(ContentManager content, string assetName)
+        {
             this.Texture = content.Load<Texture2D>(assetName);
         }
         /// <summary>
         /// Updates the sprite.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        public virtual void Update(GameTime gameTime) {
+        public virtual void Update(GameTime gameTime)
+        {
             this.Position += this.Direction * this.Speed * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
         }
         /// <summary>
@@ -148,7 +161,8 @@ namespace BreakOut {
         /// <param name="currentKeyboardState">State of the current keyboard.</param>
         /// <param name="previousMouseState">State of the previous mouse.</param>
         /// <param name="currentMouseState">State of the current mouse.</param>
-        public virtual void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
+        public virtual void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState)
+        {
 
         }
         /// <summary>
@@ -156,7 +170,8 @@ namespace BreakOut {
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
 
             spriteBatch.Begin();
 

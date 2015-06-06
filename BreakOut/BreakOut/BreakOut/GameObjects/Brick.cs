@@ -16,11 +16,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class Brick.
     /// </summary>
-    public class Brick : Sprite {
+    public class Brick : Sprite
+    {
 
         private const short DEFAULT_BRICK_VALUE = 100;
 
@@ -45,7 +47,8 @@ namespace BreakOut {
         public int HitsToKill
         {
             get { return hitsToKill; }
-            set {
+            set
+            {
                 hitsToKill = value;
                 this.BrickImage = string.Format("brick{0}", value);
             }
@@ -61,7 +64,7 @@ namespace BreakOut {
         /// </summary>
         public Brick(int positionX, int positionY, float screenWidth, float screenHeight, int hitsToKill, PowerType powerType)
         {
-            float brickWidth = screenWidth*(9/8) / 27;
+            float brickWidth = screenWidth * (9 / 8) / 27;
             float brickHeight = screenHeight / 27;
 
             this.Position = new Vector2(positionX * brickWidth, positionY * brickHeight);
@@ -73,15 +76,19 @@ namespace BreakOut {
         }
 
         public override void LoadContent(Microsoft.Xna.Framework.Content.ContentManager content, string assetName)
-{
- 	 base.LoadContent(content, assetName);
+        {
+            base.LoadContent(content, assetName);
             this.Content = content;
-}
-        public void Hit() {
+        }
+        public void Hit()
+        {
             this.HitsToKill -= 1;
-            if (this.HitsToKill == 0) {
+            if (this.HitsToKill == 0)
+            {
                 this.Destroyed = true;
-            } else {
+            }
+            else
+            {
                 this.LoadContent(this.Content, this.BrickImage);
             }
         }

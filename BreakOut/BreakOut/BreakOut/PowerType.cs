@@ -14,12 +14,14 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Enum PowerType
     /// </summary>
-    public enum PowerType {
-        None=0,
+    public enum PowerType
+    {
+        None = 0,
         PlusOneLife,
         MinusOneLife,
         OnFire,
