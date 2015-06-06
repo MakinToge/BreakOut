@@ -18,11 +18,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class Ball.
     /// </summary>
-    public class Ball : Sprite {
+    public class Ball : Sprite
+    {
         /// <summary>
         /// Gets or sets the width of the screen.
         /// </summary>
@@ -53,11 +55,14 @@ namespace BreakOut {
         /// </summary>
         /// <value>The start position.</value>
         public Vector2 StartPosition { get; set; }
+
+        public bool isOnFire { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
         /// </summary>
         public Ball()
-            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0) {
+            : this(Vector2.Zero, Vector2.Zero, Vector2.Zero, 0)
+        {
 
         }
         /// <summary>
@@ -65,7 +70,8 @@ namespace BreakOut {
         /// </summary>
         /// <param name="position">The position.</param>
         public Ball(Vector2 position)
-            : this(position, Vector2.Zero, Vector2.Zero, 0) {
+            : this(position, Vector2.Zero, Vector2.Zero, 0)
+        {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Sprite" /> class.
@@ -74,7 +80,11 @@ namespace BreakOut {
         /// <param name="size">The size.</param>
         /// <param name="direction">The direction.</param>
         /// <param name="speed">The speed.</param>
-        public Ball(Vector2 position, Vector2 size, Vector2 direction, float speed) : base(position, size, direction, speed) { }
+        public Ball(Vector2 position, Vector2 size, Vector2 direction, float speed)
+            : base(position, size, direction, speed)
+        {
+            this.isOnFire = false;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Ball"/> class.
         /// </summary>
@@ -89,7 +99,10 @@ namespace BreakOut {
         /// <param name="screenHeight">Height of the screen.</param>
         /// <param name="difficulty">The difficulty.</param>
         public Ball(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed, int screenWidth, int screenHeight, Difficulty difficulty)
-            : base(positionX, positionY, width, height, directionX, directionY, speed) {
+            : base(positionX, positionY, width, height, directionX, directionY, speed)
+        {
+            this.isOnFire = false;
+
             this.ScreenWidth = screenWidth;
             this.ScreenHeight = screenHeight;
 
@@ -107,11 +120,15 @@ namespace BreakOut {
         public void Update(GameTime gameTime, SoundEffect effect, bool isInvicible)
         { //touche mur
             //Bords Left and Right
-            if ((this.Position.X <= 0 && this.Direction.X < 0) || (this.Position.X > this.ScreenWidth - this.Size.X && this.Direction.X > 0)) {
+            if ((this.Position.X <= 0 && this.Direction.X < 0)
+                || (this.Position.X > this.ScreenWidth - this.Size.X && this.Direction.X > 0))
+            {
                 this.Direction = new Vector2(-1 * this.Direction.X, this.Direction.Y);
                 effect.Play();
             }//Bord Up
-            else if ((this.Position.Y <= 0 && this.Direction.Y < 0) || (this.Position.Y > this.ScreenHeight - this.Size.Y && this.Direction.Y > 0 && isInvicible)) {
+            else if ((this.Position.Y <= 0 && this.Direction.Y < 0)
+                || (this.Position.Y > this.ScreenHeight - this.Size.Y && this.Direction.Y > 0 && isInvicible))
+            {
                 this.Direction = new Vector2(this.Direction.X, -1 * this.Direction.Y);
                 effect.Play();
             }
@@ -120,14 +137,41 @@ namespace BreakOut {
             base.Update(gameTime);
         }
 
+        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            Color[] data = new Color[this.Texture.Width * this.Texture.Height];
+            this.Texture.GetData(data);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].A >= 200)
+                {
+                    if (this.isOnFire)
+                    {
+                        data[i] = Color.Red;
+                    }
+                    else
+                    {
+                        data[i] = Color.White;
+                    }
+                }
+            }
+
+            this.Texture.SetData(data);
+
+            base.Draw(spriteBatch, gameTime);
+        }
+
         /// <summary>
         /// Sets the difficulty.
         /// </summary>
         /// <param name="difficulty">The difficulty.</param>
-        public void setDifficulty(Difficulty difficulty) {
-            switch (difficulty) {
+        public void setDifficulty(Difficulty difficulty)
+        {
+            switch (difficulty)
+            {
                 case Difficulty.Easy:
-                    this.Acceleration = 0.05f;
+                    this.Acceleration = 0.0f;
                     this.MaxSpeed = 0.9f;
                     break;
                 case Difficulty.Normal:
@@ -150,8 +194,10 @@ namespace BreakOut {
         /// Determines whether this instance is out.
         /// </summary>
         /// <returns><c>true</c> if this instance is out; otherwise, <c>false</c>.</returns>
-        public bool isOut() {
-            if (this.Position.Y > this.ScreenHeight) {
+        public bool isOut()
+        {
+            if (this.Position.Y > this.ScreenHeight)
+            {
                 return true;
             }
             return false;

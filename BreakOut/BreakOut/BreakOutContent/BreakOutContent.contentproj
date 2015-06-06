@@ -158,6 +158,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Power\LargerPaddle.png">
+      <Name>LargerPaddle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Power\PlusOneLife.png">
       <Name>PlusOneLife</Name>
       <Importer>TextureImporter</Importer>
