@@ -131,8 +131,10 @@ namespace BreakOut
         public int Level { get; set; }
         public ContentManager Content { get; set; }
 
-        public bool isInvicible { get; set; }
-        public float invicibleTimer { get; set; }
+        public bool isInvincible { get; set; }
+        public float invincibleTimer { get; set; }
+        public TextSprite invincibilityTimeTextSprite { get; set; }
+
         public bool ballIsOnFire { get; set; }
         public float fireTimer { get; set; }
 
@@ -161,8 +163,10 @@ namespace BreakOut
             this.ChronoSprite = new TextSprite(15 * this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
             this.Chrono = new Chrono();
             this.Paused = false;
-            this.isInvicible = false;
+            this.isInvincible = false;
             this.ballIsOnFire = false;
+
+            this.invincibilityTimeTextSprite = new TextSprite(20 * this.ScreenWidth / 32, this.ScreenHeight / 27, "", Color.White);
         }
 
         /// <summary>
@@ -193,6 +197,7 @@ namespace BreakOut
             Paddle.LoadContent(content, "paddle");
             ScoreSprite.LoadContent(content, "Arial28");
             ChronoSprite.LoadContent(content, "Arial28");
+            invincibilityTimeTextSprite.LoadContent(content, "Arial28");
 
             foreach (Brick item in this.Bricks)
             {
@@ -249,21 +254,21 @@ namespace BreakOut
         {
             foreach (Ball ball in this.Balls)
             {
-                ball.Update(gametime, effectWall, this.isInvicible);
+                ball.Update(gametime, effectWall, this.isInvincible);
             }
 
             Paddle.Update(gametime);
             this.Chrono.Milliseconds += gametime.ElapsedGameTime.Milliseconds;
             this.ChronoSprite.Text = this.Chrono.ToString();
 
-            if (this.isInvicible)
+            if (this.isInvincible)
             {
-                this.invicibleTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
+                this.invincibleTimer += (float)gametime.ElapsedGameTime.TotalSeconds;
 
-                if (this.invicibleTimer >= this.LIMIT_TIMER)
+                if (this.invincibleTimer >= this.LIMIT_TIMER)
                 {
-                    this.isInvicible = false;
-                    this.invicibleTimer = 0;
+                    this.isInvincible = false;
+                    this.invincibleTimer = 0;
                 }
             }
 
@@ -303,7 +308,7 @@ namespace BreakOut
                     }
                 }
 
-                if (ball.isOut() && !this.isInvicible)
+                if (ball.isOut() && !this.isInvincible)
                 {
                     if (this.Balls.Count == 1)
                     {
@@ -417,8 +422,8 @@ namespace BreakOut
                     }
                     break;
                 case PowerType.Invicibility:
-                    this.isInvicible = true;
-                    this.invicibleTimer = 0;
+                    this.isInvincible = true;
+                    this.invincibleTimer = 0;
                     break;
                 default:
                     break;
@@ -439,6 +444,7 @@ namespace BreakOut
                     item.Draw(spriteBatch, gameTime);
                 }
             }
+
             foreach (Ball ball in this.Balls)
             {
                 ball.Draw(spriteBatch, gameTime);
@@ -450,11 +456,20 @@ namespace BreakOut
             {
                 sprite.Draw(spriteBatch, gameTime);
             }
+
             ScoreSprite.Draw(spriteBatch, gameTime);
             ChronoSprite.Draw(spriteBatch, gameTime);
+            
             foreach (Power item in this.Powers)
             {
                 item.Draw(spriteBatch, gameTime);
+            }
+
+            if(this.isInvincible)
+            {
+                this.invincibilityTimeTextSprite.Text = string.Format("Invinciblity time : {0}",
+                    (short)(this.LIMIT_TIMER - this.invincibleTimer));
+                this.invincibilityTimeTextSprite.Draw(spriteBatch, gameTime);
             }
         }
 
@@ -591,7 +606,7 @@ namespace BreakOut
                     for (int j = 0; j < 7; j++)
                     {
                         Brick brick = new Brick(j * 2 + 1, i * 2 + 5, this.ScreenWidth, this.ScreenHeight, 1, PowerType.None);
-                        brick.Power = PowerType.OnFire;
+                        brick.Power = PowerType.Invicibility;
                         bricks.Add(brick);
                     }
                 }
