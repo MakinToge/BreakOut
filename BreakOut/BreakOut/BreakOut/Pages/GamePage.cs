@@ -312,7 +312,7 @@ namespace BreakOut
 
                 Rectangle rectangle = new Rectangle((int)ball.Position.X, (int)(ball.Position.Y + (ball.Size.Y / 2)), (int)ball.Size.X, (int)(ball.Size.Y / 2));
                 if (ball.Direction.Y > 0 && Paddle.Rectangle.Intersects(rectangle))
-                { //touche paddle
+                { 
                     effectPaddle.Play();
                     ball.Direction = this.ComputeDirectionBall(ball, Paddle);
                     if (ball.Speed < ball.MaxSpeed)
@@ -521,9 +521,16 @@ namespace BreakOut
                 for (int i = 0; i < this.Bricks.Count; i++)
                 {
                     if (ball.Rectangle.Intersects(this.Bricks[i].Rectangle) && !this.Bricks[i].Destroyed)
-                    { // touche brique
+                    {
                         effect.Play();
-                        this.Bricks[i].Hit();
+                        if(ball.IsOnFire)
+                        {
+                            this.Bricks[i].Destroyed = true;
+                        }
+                        else
+                        {
+                            this.Bricks[i].Hit();
+                        }                      
                         this.Score += this.Bricks[i].Value;
 
                         if (!this.ballIsOnFire)
@@ -544,7 +551,7 @@ namespace BreakOut
                             }
                         }
 
-                        //Ball Destroyed
+                        //Brick Destroyed
                         if (this.Bricks[i].Destroyed)
                         {
                             //Power Brick
