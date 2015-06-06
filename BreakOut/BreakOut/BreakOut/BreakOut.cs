@@ -53,6 +53,9 @@ namespace BreakOut {
 
         public SoundEffect effectVictory;
         public SoundEffect effectDefeat;
+
+        public SoundEffect song;
+        public SoundEffectInstance nyan;
         /// <summary>
         /// The screen width
         /// </summary>
@@ -210,6 +213,12 @@ namespace BreakOut {
             effectVictory = Content.Load<SoundEffect>("Sound/win");
             effectDefeat = Content.Load<SoundEffect>("Sound/LAUGH");
 
+            //Music
+            song = Content.Load<SoundEffect>("Sound/415384_Nyan");
+            nyan = song.CreateInstance();
+            nyan.IsLooped = true;
+            nyan.Volume = 0.5f;
+
         }
 
         /// <summary>
@@ -235,6 +244,12 @@ namespace BreakOut {
             this.CurrentMouseState = Mouse.GetState();
             this.PreviousKeyBoardState = this.CurrentKeyBoardState;
             this.CurrentKeyBoardState = Keyboard.GetState();
+
+            if ((this.CurrentKeyBoardState.IsKeyDown(Keys.Escape) && this.PreviousKeyBoardState.IsKeyUp(Keys.Escape)))
+            {
+                nyan.Stop();
+                this.Exit();
+            }
 
             //Update logic
             switch (CurrentGameState) {
@@ -276,7 +291,7 @@ namespace BreakOut {
                     InstructionPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
                     if (this.IsGoingBack()) {
                         CurrentGameState = GameState.MainMenu;
-                    }
+            }
                     if (InstructionPage.ButtonReturn.IsClicked) {
                         InstructionPage.ButtonReturn.IsClicked = false;
                         CurrentGameState = GameState.MainMenu;
@@ -329,7 +344,6 @@ namespace BreakOut {
         /// </summary>
         public void UpdateDifficultySelection(GameTime gameTime) {
             DifficultyPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
-
             if (DifficultyPage.ButtonEasy.IsClicked) {
                 GamePage.Difficulty = Difficulty.Easy;
                 CurrentGameState = GameState.LevelSelection;
@@ -364,6 +378,7 @@ namespace BreakOut {
         /// </summary>
         public void UpdateLevelSelection(GameTime gameTime) {
             LevelPage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
+
             if (this.IsGoingBack()) {
                 CurrentGameState = GameState.DifficultySelection;
             }
@@ -379,6 +394,8 @@ namespace BreakOut {
                     GamePage.LoadContent(this.Content);
                     CurrentGameState = GameState.InPlay;
                     LevelPage.Levels[i].IsClicked = false;
+
+                    nyan.Play();
                 }
             }
         }
@@ -388,6 +405,7 @@ namespace BreakOut {
         /// </summary>
         public void UpdateInPlayPage(GameTime gametime) {
             GamePage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
+
             GamePage.Update(gametime);
             if (GamePage.Bricks.Count == 0) {
                 CurrentGameState = GameState.Finish;
@@ -406,6 +424,8 @@ namespace BreakOut {
                     difficulty = 3500;
                 }
                 FinishPage.Title.Text = string.Format("Win! Difficulty: {0} Bricks : {1} Time:{2} Total : {3}",difficulty, brick, time,GamePage.Score);
+
+                nyan.Stop();
                 effectVictory.Play();
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
             }
@@ -414,10 +434,12 @@ namespace BreakOut {
                 effectDefeat.Play();
                 FinishPage.Title.Text = string.Format("Try again ? Your Score : {0}", GamePage.Score);
                 ScorePage.SaveScore(GamePage.Level, GamePage.Score);
+                nyan.Stop();
             }
             if (GamePage.Paused) {
                 CurrentGameState = GameState.Pause;
                 GamePage.Paused = false;
+                nyan.Pause();
             }
         }
 
@@ -433,6 +455,7 @@ namespace BreakOut {
                 GamePage.LoadContent(this.Content);
                 CurrentGameState = GameState.InPlay;
                 FinishPage.Replay.IsClicked = false;
+                nyan.Play();
             }
             else if (FinishPage.ReturnToSelectLevel.IsClicked) {
                 GamePage.Reset();
@@ -453,21 +476,25 @@ namespace BreakOut {
         /// </summary>
         public void UpdatePausePage(GameTime gameTime) {
             PausePage.HandleInput(this.PreviousKeyBoardState, this.CurrentKeyBoardState, this.PreviousMouseState, this.CurrentMouseState);
+
             if (PausePage.Resume.IsClicked) {
                 CurrentGameState = GameState.InPlay;
                 PausePage.Resume.IsClicked = false;
+                nyan.Play();
             }
             else if (PausePage.ReturnToSelectLevel.IsClicked) {
                 GamePage.Reset();
                 GamePage.LoadContent(this.Content);
                 CurrentGameState = GameState.LevelSelection;
                 PausePage.ReturnToSelectLevel.IsClicked = false;
+                nyan.Stop();
             }
             else if (PausePage.ReturnToSelectDifficulty.IsClicked) {
                 GamePage.Reset();
                 GamePage.LoadContent(this.Content);
                 CurrentGameState = GameState.DifficultySelection;
                 PausePage.ReturnToSelectDifficulty.IsClicked = false;
+                nyan.Stop();
             }
         }
 
@@ -482,6 +509,5 @@ namespace BreakOut {
             }
             return false;
         }
-
     }
 }
