@@ -58,7 +58,8 @@ namespace BreakOut
 
         public bool changed { get; set; }
         private bool isOnFire;
-        public bool IsOnFire {
+        public bool IsOnFire
+        {
             get
             {
                 return isOnFire;
