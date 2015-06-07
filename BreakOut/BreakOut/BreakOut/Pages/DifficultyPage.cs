@@ -54,6 +54,10 @@ namespace BreakOut {
         /// </summary>
         /// <value>The button hard.</value>
         public Button ButtonHard { get; set; }
+        /// <summary>
+        /// Gets or sets the button high scores.
+        /// </summary>
+        /// <value>The button high scores.</value>
         public Button ButtonHighScores { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="Page" /> class.

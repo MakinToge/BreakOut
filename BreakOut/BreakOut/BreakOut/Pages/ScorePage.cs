@@ -1,10 +1,5 @@
 ﻿// ***********************************************************************
 // Assembly         : BreakOut
-// Author           : Floriel
-// Created          : 06-05-2015
-//
-// Last Modified By : Floriel
-// Last Modified On : 06-05-2015
 // ***********************************************************************
 // <copyright file="ScorePage.cs" company="">
 //     Copyright ©  2015
@@ -154,7 +149,7 @@ namespace BreakOut.Pages {
         public void SaveScore(int level, int score) {
             if (Convert.ToInt32(this.Scores[level - 1]) < score) {
                 this.Scores[level - 1] = score.ToString();
-                this.ScoresSprites[level - 1].Text = string.Format("Level {0} : {1}",level,score.ToString());
+                this.ScoresSprites[level - 1].Text = string.Format("Level {0} : {1}", level, score.ToString());
                 System.IO.File.WriteAllLines(this.FileName, this.Scores);
             }
         }
