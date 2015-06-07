@@ -1,2 +1,0 @@
-# BreakOut
-BreakOut - student project
