@@ -20,12 +20,14 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
 
     /// <summary>
     /// Class InstructionPage.
     /// </summary>
-    public class InstructionPage : Page {
+    public class InstructionPage : Page
+    {
 
         /// <summary>
         /// Gets or sets the button return.
@@ -84,7 +86,8 @@ namespace BreakOut {
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             Instructions.Draw(spriteBatch, gameTime);
             ButtonReturn.Draw(spriteBatch, gameTime);
         }
