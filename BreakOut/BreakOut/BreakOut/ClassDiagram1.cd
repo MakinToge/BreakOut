@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BreakOut.BreakOut" Collapsed="true">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAQCEFAhAEBIAyAAEAQABgAAGADIARgAIgCgQwCACIc=</HashCode>
+      <FileName>BreakOut.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.DifficultyPage" Collapsed="true">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAACAAAAAAwAIAAAAEAAAAAAAAAAAIAAAQAAJAAQ=</HashCode>
+      <FileName>Pages\DifficultyPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.FinishPage" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAA0AAAAAAAAAAAAAAAAAAIQAAAAEBAAQ=</HashCode>
+      <FileName>Pages\FinishPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.GamePage" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AC0kDACBAgAbB0gCAkEZAAQACAIEEIATAICAgAIQAAQ=</HashCode>
+      <FileName>Pages\GamePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.InstructionPage" Collapsed="true">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAwAAAAAAEAAAAAAIAAAAAAAAAAABAAQ=</HashCode>
+      <FileName>Pages\InstructionPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.LevelPage" Collapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAwAAABAAEAAAAAAAAAABAAAAAAABAAQ=</HashCode>
+      <FileName>Pages\LevelPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.PausePage" Collapsed="true">
+    <Position X="8" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAA0AAAAAAAAAAAAAAAAAAIAAAAAkBAAQ=</HashCode>
+      <FileName>Pages\PausePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.Pages.ScorePage" Collapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACIQAAgA0kAAAAAEAAAAAAAAAAAAAAAAABBAAQ=</HashCode>
+      <FileName>Pages\ScorePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakOut.Page" Collapsed="true">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEACAAMBAAwAAAAAAAAAASABAAAAAAAAAQAAAAgQ=</HashCode>
+      <FileName>Pages\Page.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

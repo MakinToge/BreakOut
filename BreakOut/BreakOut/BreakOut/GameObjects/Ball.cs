@@ -18,13 +18,11 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut
-{
+namespace BreakOut {
     /// <summary>
     /// Class Ball.
     /// </summary>
-    public class Ball : Sprite
-    {
+    public class Ball : Sprite {
         /// <summary>
         /// Gets or sets the width of the screen.
         /// </summary>
@@ -56,33 +54,65 @@ namespace BreakOut
         /// <value>The start position.</value>
         public Vector2 StartPosition { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Ball"/> is changed.
+        /// </summary>
+        /// <value><c>true</c> if changed; otherwise, <c>false</c>.</value>
         public bool changed { get; set; }
+        /// <summary>
+        /// Value indicating whether this instance is on fire.
+        /// </summary>
         private bool isOnFire;
-        public bool IsOnFire
-        {
-            get
-            {
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is on fire.
+        /// </summary>
+        /// <value><c>true</c> if this instance is on fire; otherwise, <c>false</c>.</value>
+        public bool IsOnFire {
+            get {
                 return isOnFire;
             }
-            set
-            {
+            set {
                 isOnFire = value;
                 changed = true;
             }
         }
 
+        /// <summary>
+        /// The default ball maximum speed
+        /// </summary>
         private const float DEFAULT_BALL_MAX_SPEED = 1.5f;
+        /// <summary>
+        /// The easy (difficulty) ball maximum speed
+        /// </summary>
         private const float EASY_BALL_MAX_SPEED = 0.6f;
+        /// <summary>
+        /// The normal (difficulty) ball maximum speed
+        /// </summary>
         private const float NORMAL_BALL_MAX_SPEED = 0.85f;
+        /// <summary>
+        /// The hard (difficulty) ball maximum speed
+        /// </summary>
         private const float HARD_BALL_MAX_SPEED = 1.0f;
 
+        /// <summary>
+        /// The default ball acceleration
+        /// </summary>
         private const float DEFAULT_BALL_ACCELERATION = 0.05f;
+        /// <summary>
+        /// The easy (difficulty) ball acceleration
+        /// </summary>
         private const float EASY_BALL_ACCELERATION = 0.01f;
+        /// <summary>
+        /// The normal (difficulty) ball acceleration
+        /// </summary>
         private const float NORMAL_BALL_ACCELERATION = 0.06f;
+        /// <summary>
+        /// The hard (difficulty) ball acceleration
+        /// </summary>
         private const float HARD_BALL_ACCELERATION = 0.07f;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ball"/> class.
+        /// Initializes a new instance of the <see cref="Ball" /> class.
         /// </summary>
         /// <param name="positionX">The position x.</param>
         /// <param name="positionY">The position y.</param>
@@ -95,8 +125,7 @@ namespace BreakOut
         /// <param name="screenHeight">Height of the screen.</param>
         /// <param name="difficulty">The difficulty.</param>
         public Ball(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed, int screenWidth, int screenHeight, Difficulty difficulty)
-            : base(positionX, positionY, width, height, directionX, directionY, speed)
-        {
+            : base(positionX, positionY, width, height, directionX, directionY, speed) {
             this.isOnFire = false;
 
             this.ScreenWidth = screenWidth;
@@ -113,18 +142,17 @@ namespace BreakOut
         /// Updates the ball.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        public void Update(GameTime gameTime, SoundEffect effect, bool isInvicible)
-        { //touche mur
+        /// <param name="effect">The sound effect.</param>
+        /// <param name="isInvicible">if set to <c>true</c> [is invicible].</param>
+        public void Update(GameTime gameTime, SoundEffect effect, bool isInvicible) { //touche mur
             //Bords Left and Right
             if ((this.Position.X <= 0 && this.Direction.X < 0)
-                || (this.Position.X > this.ScreenWidth - this.Size.X && this.Direction.X > 0))
-            {
+                || (this.Position.X > this.ScreenWidth - this.Size.X && this.Direction.X > 0)) {
                 this.Direction = new Vector2(-1 * this.Direction.X, this.Direction.Y);
                 effect.Play();
             }//Bord Up
             else if ((this.Position.Y <= 0 && this.Direction.Y < 0)
-                || (this.Position.Y > this.ScreenHeight - this.Size.Y && this.Direction.Y > 0 && isInvicible))
-            {
+                || (this.Position.Y > this.ScreenHeight - this.Size.Y && this.Direction.Y > 0 && isInvicible)) {
                 this.Direction = new Vector2(this.Direction.X, -1 * this.Direction.Y);
                 effect.Play();
             }
@@ -133,34 +161,31 @@ namespace BreakOut
             base.Update(gameTime);
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            if (this.changed == true)
-            {
+        /// <summary>
+        /// Draws the ball.
+        /// </summary>
+        /// <param name="spriteBatch">The sprite batch.</param>
+        /// <param name="gameTime">The game time.</param>
+        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, GameTime gameTime) {
+            if (this.changed == true) {
                 Color[] data = new Color[this.Texture.Width * this.Texture.Height];
                 this.Texture.GetData(data);
 
-                for (int i = 0; i < data.Length; i++)
-                {
-                    if (data[i].A >= 200)
-                    {
-                        if (this.isOnFire)
-                        {
+                for (int i = 0; i < data.Length; i++) {
+                    if (data[i].A >= 200) {
+                        if (this.isOnFire) {
                             data[i] = Color.Red;
                         }
-                        else
-                        {
+                        else {
                             data[i] = Color.White;
                         }
                     }
                 }
 
-                try
-                {
+                try {
                     this.Texture.SetData(data);
                 }
-                catch (InvalidOperationException ioe)
-                {
+                catch (InvalidOperationException ioe) {
                 }
                 changed = false;
             }
@@ -172,10 +197,8 @@ namespace BreakOut
         /// Sets the difficulty.
         /// </summary>
         /// <param name="difficulty">The difficulty.</param>
-        public void setDifficulty(Difficulty difficulty)
-        {
-            switch (difficulty)
-            {
+        public void setDifficulty(Difficulty difficulty) {
+            switch (difficulty) {
                 case Difficulty.Easy:
                     this.Acceleration = EASY_BALL_ACCELERATION;
                     this.MaxSpeed = EASY_BALL_MAX_SPEED;
@@ -195,10 +218,8 @@ namespace BreakOut
         /// Determines whether this instance is out.
         /// </summary>
         /// <returns><c>true</c> if this instance is out; otherwise, <c>false</c>.</returns>
-        public bool isOut()
-        {
-            if (this.Position.Y > this.ScreenHeight)
-            {
+        public bool isOut() {
+            if (this.Position.Y > this.ScreenHeight) {
                 return true;
             }
             return false;
