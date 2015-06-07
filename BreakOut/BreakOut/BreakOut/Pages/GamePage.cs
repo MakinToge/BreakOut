@@ -666,7 +666,7 @@ namespace BreakOut
         {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            this.Bricks = LevelLoader(string.Format(RELEASE_LEVEL_FILES_PATH + "{0}.lvl", level));
+            this.Bricks = LevelLoader(string.Format(DEBUG_LEVEL_FILES_PATH + "{0}.lvl", level));
         }
 
 
