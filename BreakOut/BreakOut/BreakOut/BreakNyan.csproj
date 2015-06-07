@@ -102,9 +102,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BreakOutContent\BreakOutContent.contentproj">
-      <Name>BreakOutContent</Name>
+    <ProjectReference Include="..\BreakOutContent\BreakNyanContent.contentproj">
+      <Name>BreakNyanContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{86E8BB2C-E5E3-43AA-BE9D-0FD9D7B3105A}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
