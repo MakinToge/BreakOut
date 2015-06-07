@@ -235,6 +235,7 @@ namespace BreakOut
         /// The debug level files path
         /// </summary>
         private const string DEBUG_LEVEL_FILES_PATH = "../../../../BreakOutContent/LevelScript/";
+        private const string RELEASE_LEVEL_FILES_PATH = "Content/LevelScript/";
         private const short DEFAULT_POINT_LOST_PER_DEATH = 200;
 
         /// <summary>
@@ -665,7 +666,7 @@ namespace BreakOut
         {
             this.Bricks = new List<Brick>();
             this.Powers = new List<Power>();
-            this.Bricks = LevelLoader(string.Format(DEBUG_LEVEL_FILES_PATH + "{0}.lvl", level));
+            this.Bricks = LevelLoader(string.Format(RELEASE_LEVEL_FILES_PATH + "{0}.lvl", level));
         }
 
 
