@@ -157,6 +157,7 @@ namespace BreakOut
         private const short MINIMUM_PADDLE_SIZE = 10;
         private const short MAXIMUM_PADDLE_SIZE = 300;
         private const string DEBUG_LEVEL_FILES_PATH = "../../../../BreakOutContent/LevelScript/";
+        private const short DEFAULT_POINT_LOST_PER_DEATH = 200;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GamePage"/> class.
@@ -331,7 +332,7 @@ namespace BreakOut
 
                         this.PrepareLaunch();
                         this.Launched = false;
-                        this.Score -= 200;
+                        this.Score -= DEFAULT_POINT_LOST_PER_DEATH;
                     }
                     else
                     {

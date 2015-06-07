@@ -18,11 +18,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class LevelPage.
     /// </summary>
-    public class LevelPage : Page {
+    public class LevelPage : Page
+    {
 
         /// <summary>
         /// Gets or sets the select level.
@@ -51,13 +53,15 @@ namespace BreakOut {
         /// <param name="screenWidth">Width of the screen.</param>
         /// <param name="screenHeight">Height of the screen.</param>
         public LevelPage(GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
-            : base(graphics, screenWidth, screenHeight) {
+            : base(graphics, screenWidth, screenHeight)
+        {
         }
 
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public override void Initialize() {
+        public override void Initialize()
+        {
             //Texts
             this.SelectLevel = new TextSprite(6 * this.DefaultUnitX, 2f * this.DefaultUnitY, "Select Level", Color.White);
 
@@ -90,10 +94,12 @@ namespace BreakOut {
         /// Loads the content.
         /// </summary>
         /// <param name="content">The content.</param>
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
             SelectLevel.LoadContent(content, "Arial28");
             ButtonReturn.LoadContent(content, "return");
-            for (int i = 0; i < this.Levels.Length; i++) {
+            for (int i = 0; i < this.Levels.Length; i++)
+            {
                 this.Levels[i].LoadContent(content, "Level/" + (i + 1));
             }
         }
@@ -105,8 +111,10 @@ namespace BreakOut {
         /// <param name="currentKeyboardState">State of the current keyboard.</param>
         /// <param name="previousMouseState">State of the previous mouse.</param>
         /// <param name="currentMouseState">State of the current mouse.</param>
-        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
-            foreach (Button item in Levels) {
+        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState)
+        {
+            foreach (Button item in Levels)
+            {
                 item.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             }
             ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
@@ -117,10 +125,12 @@ namespace BreakOut {
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             SelectLevel.Draw(spriteBatch, gameTime);
             ButtonReturn.Draw(spriteBatch, gameTime);
-            foreach (Button item in Levels) {
+            foreach (Button item in Levels)
+            {
                 item.Draw(spriteBatch, gameTime);
             }
             spriteBatch.Begin();

@@ -18,11 +18,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class Page.
     /// </summary>
-    public class Page {
+    public class Page
+    {
 
         /// <summary>
         /// The screen width
@@ -32,9 +34,11 @@ namespace BreakOut {
         /// Gets or sets the width of the screen.
         /// </summary>
         /// <value>The width of the screen.</value>
-        public int ScreenWidth {
+        public int ScreenWidth
+        {
             get { return screenWidth; }
-            set {
+            set
+            {
                 screenWidth = value;
                 this.Graphics.PreferredBackBufferWidth = value;
                 this.Graphics.ApplyChanges();
@@ -48,9 +52,11 @@ namespace BreakOut {
         /// Gets or sets the height of the screen.
         /// </summary>
         /// <value>The height of the screen.</value>
-        public int ScreenHeight {
+        public int ScreenHeight
+        {
             get { return screenHeight; }
-            set {
+            set
+            {
                 screenHeight = value;
                 this.Graphics.PreferredBackBufferHeight = value;
                 this.Graphics.ApplyChanges();
@@ -71,7 +77,8 @@ namespace BreakOut {
         /// <param name="graphics">The graphics.</param>
         /// <param name="screenWidth">Width of the screen.</param>
         /// <param name="screenHeight">Height of the screen.</param>
-        public Page(GraphicsDeviceManager graphics, int screenWidth, int screenHeight) {
+        public Page(GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
+        {
             this.Graphics = graphics;
             this.ScreenWidth = screenWidth;
             this.ScreenHeight = screenHeight;
@@ -85,20 +92,23 @@ namespace BreakOut {
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public virtual void Initialize() {
+        public virtual void Initialize()
+        {
         }
 
         /// <summary>
         /// Loads the content.
         /// </summary>
         /// <param name="content">The content.</param>
-        public virtual void LoadContent(ContentManager content) {
+        public virtual void LoadContent(ContentManager content)
+        {
         }
 
         /// <summary>
         /// Unloads the content.
         /// </summary>
-        protected virtual void UnloadContent() {
+        protected virtual void UnloadContent()
+        {
         }
         /// <summary>
         /// Handles the input.
@@ -107,20 +117,23 @@ namespace BreakOut {
         /// <param name="currentKeyboardState">State of the current keyboard.</param>
         /// <param name="previousMouseState">State of the previous mouse.</param>
         /// <param name="currentMouseState">State of the current mouse.</param>
-        public virtual void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
+        public virtual void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState)
+        {
         }
         /// <summary>
         /// Updates the pages.
         /// </summary>
         /// <param name="gametime">The gametime.</param>
-        public virtual void Update(GameTime gametime) {
+        public virtual void Update(GameTime gametime)
+        {
         }
         /// <summary>
         /// Draws the page.
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
         }
     }
 }

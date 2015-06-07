@@ -24,11 +24,13 @@ using System.Text;
 /// <summary>
 /// The Pages namespace.
 /// </summary>
-namespace BreakOut.Pages {
+namespace BreakOut.Pages
+{
     /// <summary>
     /// Class ScorePage.
     /// </summary>
-    public class ScorePage : Page {
+    public class ScorePage : Page
+    {
         /// <summary>
         /// Gets or sets the line.
         /// </summary>
@@ -73,18 +75,22 @@ namespace BreakOut.Pages {
         /// <param name="fileName">Name of the file.</param>
         /// <param name="nbLevel">The nb level.</param>
         public ScorePage(GraphicsDeviceManager graphics, int screenWidth, int screenHeight, string fileName, int nbLevel)
-            : base(graphics, screenWidth, screenHeight) {
+            : base(graphics, screenWidth, screenHeight)
+        {
             this.FileName = fileName;
             this.ScoresSprites = new List<TextSprite>();
             this.Scores = new string[8];
-            if (!File.Exists(fileName)) {
-                for (int i = 0; i < nbLevel; i++) {
+            if (!File.Exists(fileName))
+            {
+                for (int i = 0; i < nbLevel; i++)
+                {
                     this.Scores[i] = "0";
                 }
                 File.WriteAllLines(fileName, this.Scores);
             }
             this.Scores = File.ReadAllLines(fileName);
-            for (int i = 0; i < this.Scores.Length; i++) {
+            for (int i = 0; i < this.Scores.Length; i++)
+            {
                 string text = string.Format("Level {0} : {1}", i + 1, this.Scores[i]);
                 float x = 6 * this.DefaultUnitX;
                 float y = (4 + i) * this.DefaultUnitY;
@@ -96,7 +102,8 @@ namespace BreakOut.Pages {
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public override void Initialize() {
+        public override void Initialize()
+        {
             //Texts
             this.Title = new TextSprite(6 * this.DefaultUnitX, 2f * this.DefaultUnitY, "Score", Color.White);
 
@@ -113,18 +120,22 @@ namespace BreakOut.Pages {
         /// Loads the content.
         /// </summary>
         /// <param name="content">The content.</param>
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
             Title.LoadContent(content, "Arial28");
             ButtonReturn.LoadContent(content, "return");
             ButtonReset.LoadContent(content, "resetHighScores");
-            foreach (TextSprite item in this.ScoresSprites) {
+            foreach (TextSprite item in this.ScoresSprites)
+            {
                 item.LoadContent(content, "Arial28");
             }
         }
-        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
+        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState)
+        {
             ButtonReturn.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             ButtonReset.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
-            if (ButtonReset.IsClicked) {
+            if (ButtonReset.IsClicked)
+            {
                 this.ResetScore();
                 ButtonReset.IsClicked = false;
             }
@@ -134,12 +145,14 @@ namespace BreakOut.Pages {
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             Title.Draw(spriteBatch, gameTime);
             spriteBatch.Begin();
             spriteBatch.Draw(this.Line, new Rectangle((int)(6 * this.DefaultUnitX), (int)(4 * this.DefaultUnitY), (int)(20 * this.DefaultUnitX), 1), Color.White);
             spriteBatch.End();
-            foreach (TextSprite item in this.ScoresSprites) {
+            foreach (TextSprite item in this.ScoresSprites)
+            {
                 item.Draw(spriteBatch, gameTime);
             }
             ButtonReturn.Draw(spriteBatch, gameTime);
@@ -151,10 +164,12 @@ namespace BreakOut.Pages {
         /// </summary>
         /// <param name="level">The level.</param>
         /// <param name="score">The score.</param>
-        public void SaveScore(int level, int score) {
-            if (Convert.ToInt32(this.Scores[level - 1]) < score) {
+        public void SaveScore(int level, int score)
+        {
+            if (Convert.ToInt32(this.Scores[level - 1]) < score)
+            {
                 this.Scores[level - 1] = score.ToString();
-                this.ScoresSprites[level - 1].Text = string.Format("Level {0} : {1}",level,score.ToString());
+                this.ScoresSprites[level - 1].Text = string.Format("Level {0} : {1}", level, score.ToString());
                 System.IO.File.WriteAllLines(this.FileName, this.Scores);
             }
         }
@@ -162,8 +177,10 @@ namespace BreakOut.Pages {
         /// <summary>
         /// Resets the score.
         /// </summary>
-        public void ResetScore() {
-            for (int i = 0; i < this.Scores.Length; i++) {
+        public void ResetScore()
+        {
+            for (int i = 0; i < this.Scores.Length; i++)
+            {
                 this.Scores[i] = "0";
                 string text = string.Format("Level {0} : 0", i + 1);
                 this.ScoresSprites[i].Text = text;

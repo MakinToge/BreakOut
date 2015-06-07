@@ -18,11 +18,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class DifficultyPage.
     /// </summary>
-    public class DifficultyPage : Page {
+    public class DifficultyPage : Page
+    {
 
         /// <summary>
         /// Gets or sets the select difficulty.
@@ -62,13 +64,15 @@ namespace BreakOut {
         /// <param name="screenWidth">Width of the screen.</param>
         /// <param name="screenHeight">Height of the screen.</param>
         public DifficultyPage(GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
-            : base(graphics, screenWidth, screenHeight) {
+            : base(graphics, screenWidth, screenHeight)
+        {
         }
 
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public override void Initialize() {
+        public override void Initialize()
+        {
             //Texts
             this.SelectDifficulty = new TextSprite(6 * this.DefaultUnitX, 2 * this.DefaultUnitY, "Select Difficulty", Color.White);
             this.ButtonReturn = new Button(this.DefaultUnitX, 2 * this.DefaultUnitY, 2 * this.DefaultUnitX, this.DefaultUnitY);
@@ -94,7 +98,8 @@ namespace BreakOut {
         /// Loads the content.
         /// </summary>
         /// <param name="content">The content.</param>
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
             ButtonEasy.LoadContent(content, "easy");
             ButtonNormal.LoadContent(content, "normal");
             ButtonHard.LoadContent(content, "hard");
@@ -110,7 +115,8 @@ namespace BreakOut {
         /// <param name="currentKeyboardState">State of the current keyboard.</param>
         /// <param name="previousMouseState">State of the previous mouse.</param>
         /// <param name="currentMouseState">State of the current mouse.</param>
-        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
+        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState)
+        {
             this.ButtonEasy.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ButtonNormal.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ButtonHard.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
@@ -123,7 +129,8 @@ namespace BreakOut {
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             SelectDifficulty.Draw(spriteBatch, gameTime);
             ButtonEasy.Draw(spriteBatch, gameTime);
             ButtonNormal.Draw(spriteBatch, gameTime);

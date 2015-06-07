@@ -18,11 +18,13 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut {
+namespace BreakOut
+{
     /// <summary>
     /// Class PausePage.
     /// </summary>
-    public class PausePage : Page {
+    public class PausePage : Page
+    {
 
         /// <summary>
         /// Gets or sets the title.
@@ -62,13 +64,15 @@ namespace BreakOut {
         /// <param name="screenWidth">Width of the screen.</param>
         /// <param name="screenHeight">Height of the screen.</param>
         public PausePage(GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
-            : base(graphics, screenWidth, screenHeight) {
+            : base(graphics, screenWidth, screenHeight)
+        {
         }
 
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public override void Initialize() {
+        public override void Initialize()
+        {
             //Texts
             this.Title = new TextSprite(6 * this.ScreenWidth / 32, 1 * this.ScreenHeight / 9, "Pause", Color.White);
 
@@ -91,7 +95,8 @@ namespace BreakOut {
         /// Loads the content.
         /// </summary>
         /// <param name="content">The content.</param>
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
             Resume.LoadContent(content, "resume");
             ReturnToSelectLevel.LoadContent(content, "level");
             ReturnToSelectDifficulty.LoadContent(content, "difficulty");
@@ -105,7 +110,8 @@ namespace BreakOut {
         /// <param name="currentKeyboardState">State of the current keyboard.</param>
         /// <param name="previousMouseState">State of the previous mouse.</param>
         /// <param name="currentMouseState">State of the current mouse.</param>
-        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState) {
+        public override void HandleInput(KeyboardState previousKeyboardState, KeyboardState currentKeyboardState, MouseState previousMouseState, MouseState currentMouseState)
+        {
             this.Resume.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ReturnToSelectLevel.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
             this.ReturnToSelectDifficulty.HandleInput(previousKeyboardState, currentKeyboardState, previousMouseState, currentMouseState);
@@ -116,7 +122,8 @@ namespace BreakOut {
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
             Title.Draw(spriteBatch, gameTime);
 
             Resume.Draw(spriteBatch, gameTime);
