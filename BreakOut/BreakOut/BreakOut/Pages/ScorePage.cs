@@ -1,10 +1,5 @@
 ﻿// ***********************************************************************
 // Assembly         : BreakOut
-// Author           : Floriel
-// Created          : 06-05-2015
-//
-// Last Modified By : Floriel
-// Last Modified On : 06-05-2015
 // ***********************************************************************
 // <copyright file="ScorePage.cs" company="">
 //     Copyright ©  2015

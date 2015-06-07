@@ -1,4 +1,12 @@
-﻿
+﻿// ***********************************************************************
+// Assembly         : BreakOut
+// ***********************************************************************
+// <copyright file="InstructionPage.cs" company="">
+//     Copyright ©  2015
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,19 +17,32 @@ using System.Linq;
 using System.Text;
 
 
-namespace BreakOut
-{
+/// <summary>
+/// The BreakOut namespace.
+/// </summary>
+namespace BreakOut {
 
-    public class InstructionPage : Page
-    {
+    /// <summary>
+    /// Class InstructionPage.
+    /// </summary>
+    public class InstructionPage : Page {
 
         /// <summary>
         /// Gets or sets the button return.
         /// </summary>
         /// <value>The button return.</value>
         public Button ButtonReturn { get; set; }
-        public Texture2D Line { get; set; }
+        /// <summary>
+        /// Gets or sets the instructions.
+        /// </summary>
+        /// <value>The instructions.</value>
         public Sprite Instructions { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Page" /> class.
+        /// </summary>
+        /// <param name="graphics">The graphics.</param>
+        /// <param name="screenWidth">Width of the screen.</param>
+        /// <param name="screenHeight">Height of the screen.</param>
         public InstructionPage(GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
             : base(graphics, screenWidth, screenHeight)
         {
@@ -34,11 +55,6 @@ namespace BreakOut
         {
             this.Instructions = new Sprite(0, 0, this.ScreenWidth, this.ScreenHeight, 0, 0, 0);
             this.ButtonReturn = new Button(this.DefaultUnitX, 2 * this.DefaultUnitY, 2 * this.DefaultUnitX, this.DefaultUnitY);
-
-            //Line
-            this.Line = new Texture2D(this.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            Int32[] pixel = { 0xFFFFFF };
-            this.Line.SetData<Int32>(pixel, 0, this.Line.Width * this.Line.Height);
         }
 
         /// <summary>
@@ -68,12 +84,8 @@ namespace BreakOut
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            Instructions.Draw(spriteBatch, gameTime);/*
-            spriteBatch.Begin();
-            spriteBatch.Draw(this.Line, new Rectangle((int)(6 * this.DefaultUnitX), (int)(4 * this.DefaultUnitY), (int)(20 * this.DefaultUnitX), 1), Color.White);
-            spriteBatch.End();*/
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
+            Instructions.Draw(spriteBatch, gameTime);
             ButtonReturn.Draw(spriteBatch, gameTime);
         }
     }

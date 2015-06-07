@@ -37,24 +37,24 @@ namespace BreakOut
         /// <value>The line.</value>
         public Texture2D Line { get; set; }
         /// <summary>
-        /// Gets or sets the replay.
+        /// Gets or sets the button replay.
         /// </summary>
-        /// <value>The replay.</value>
+        /// <value>The button replay.</value>
         public Button Replay { get; set; }
         /// <summary>
-        /// Gets or sets the return to select level.
+        /// Gets or sets the button return to select level.
         /// </summary>
-        /// <value>The return to select level.</value>
+        /// <value>The button return to select level.</value>
         public Button ReturnToSelectLevel { get; set; }
         /// <summary>
-        /// Gets or sets the return to select difficulty.
+        /// Gets or sets the button return to select difficulty.
         /// </summary>
-        /// <value>The return to select difficulty.</value>
+        /// <value>The button return to select difficulty.</value>
         public Button ReturnToSelectDifficulty { get; set; }
         /// <summary>
-        /// Gets or sets the exit.
+        /// Gets or sets the button exit.
         /// </summary>
-        /// <value>The exit.</value>
+        /// <value>The button exit.</value>
         public Button Exit { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="Page" /> class.

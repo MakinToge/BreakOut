@@ -1,17 +1,13 @@
 using System;
 
-namespace BreakOut
-{
+namespace BreakOut {
 #if WINDOWS || XBOX
-    static class Program
-    {
+    static class Program {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main(string[] args)
-        {
-            using (BreakOut game = new BreakOut())
-            {
+        static void Main(string[] args) {
+            using (BreakOut game = new BreakOut()) {
                 game.Run();
             }
         }

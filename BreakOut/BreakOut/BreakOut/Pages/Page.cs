@@ -62,9 +62,25 @@ namespace BreakOut
                 this.Graphics.ApplyChanges();
             }
         }
+        /// <summary>
+        /// Gets or sets the default unit x.
+        /// </summary>
+        /// <value>The default unit x.</value>
         public float DefaultUnitX { get; set; }
+        /// <summary>
+        /// Gets or sets the default unit y.
+        /// </summary>
+        /// <value>The default unit y.</value>
         public float DefaultUnitY { get; set; }
+        /// <summary>
+        /// Gets or sets the default width of the button.
+        /// </summary>
+        /// <value>The default width of the button.</value>
         public float DefaultButtonWidth { get; set; }
+        /// <summary>
+        /// Gets or sets the default height of the button.
+        /// </summary>
+        /// <value>The default height of the button.</value>
         public float DefaultButtonHeight { get; set; }
         /// <summary>
         /// Gets or sets the graphics.

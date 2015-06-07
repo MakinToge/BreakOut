@@ -18,13 +18,11 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut
-{
+namespace BreakOut {
     /// <summary>
     /// Class TextSprite.
     /// </summary>
-    public class TextSprite
-    {
+    public class TextSprite {
         /// <summary>
         /// Gets or sets the font.
         /// </summary>
@@ -50,8 +48,7 @@ namespace BreakOut
         /// Initializes a new instance of the <see cref="TextSprite"/> class.
         /// </summary>
         public TextSprite()
-            : this(Vector2.Zero, "", Color.White)
-        {
+            : this(Vector2.Zero, "", Color.White) {
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="TextSprite"/> class.
@@ -59,8 +56,7 @@ namespace BreakOut
         /// <param name="position">The position.</param>
         /// <param name="text">The text.</param>
         /// <param name="color">The color.</param>
-        public TextSprite(Vector2 position, string text, Color color)
-        {
+        public TextSprite(Vector2 position, string text, Color color) {
             this.Position = position;
             this.Text = text;
             this.Color = color;
@@ -72,8 +68,7 @@ namespace BreakOut
         /// <param name="positionY">The position y.</param>
         /// <param name="text">The text.</param>
         /// <param name="color">The color.</param>
-        public TextSprite(float positionX, float positionY, string text, Color color)
-        {
+        public TextSprite(float positionX, float positionY, string text, Color color) {
             this.Position = new Vector2(positionX, positionY);
             this.Text = text;
             this.Color = color;
@@ -84,15 +79,13 @@ namespace BreakOut
         /// </summary>
         /// <param name="X">The x.</param>
         /// <param name="Y">The y.</param>
-        public void SetPosition(float X, float Y)
-        {
+        public void SetPosition(float X, float Y) {
             this.Position = new Vector2(X, Y);
         }
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public virtual void Initialize()
-        {
+        public virtual void Initialize() {
             this.Position = Vector2.Zero;
         }
         /// <summary>
@@ -100,24 +93,21 @@ namespace BreakOut
         /// </summary>
         /// <param name="content">The content.</param>
         /// <param name="assetName">Name of the asset.</param>
-        public virtual void LoadContent(ContentManager content, string assetName)
-        {
+        public virtual void LoadContent(ContentManager content, string assetName) {
             this.Font = content.Load<SpriteFont>(assetName);
         }
         /// <summary>
         /// Updates the sprite.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        public virtual void Update(GameTime gameTime)
-        {
+        public virtual void Update(GameTime gameTime) {
         }
         /// <summary>
         /// Handles the input.
         /// </summary>
         /// <param name="keyboardState">State of the keyboard.</param>
         /// <param name="mouseState">State of the mouse.</param>
-        public virtual void HandleInput(KeyboardState keyboardState, MouseState mouseState)
-        {
+        public virtual void HandleInput(KeyboardState keyboardState, MouseState mouseState) {
 
         }
         /// <summary>
@@ -125,8 +115,7 @@ namespace BreakOut
         /// </summary>
         /// <param name="spriteBatch">The sprite batch.</param>
         /// <param name="gameTime">The game time.</param>
-        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime) {
 
             spriteBatch.Begin();
             spriteBatch.DrawString(this.Font, this.Text, this.Position, this.Color);

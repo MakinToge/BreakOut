@@ -15,13 +15,11 @@ using System.Text;
 /// <summary>
 /// The BreakOut namespace.
 /// </summary>
-namespace BreakOut
-{
+namespace BreakOut {
     /// <summary>
     /// Class Power.
     /// </summary>
-    public class Power : Sprite
-    {
+    public class Power : Sprite {
         /// <summary>
         /// Gets or sets the width of the screen.
         /// </summary>
@@ -37,7 +35,15 @@ namespace BreakOut
         /// </summary>
         /// <value>The start position.</value>
         public Vector2 StartPosition { get; set; }
+        /// <summary>
+        /// Gets or sets the type of the power.
+        /// </summary>
+        /// <value>The type of the power.</value>
         public PowerType PowerType { get; set; }
+        /// <summary>
+        /// Gets or sets the duration of the power.
+        /// </summary>
+        /// <value>The time.</value>
         public int Time { get; set; }
 
         /// <summary>
@@ -54,8 +60,7 @@ namespace BreakOut
         /// <param name="screenHeight">Height of the screen.</param>
         /// <param name="difficulty">The difficulty.</param>
         public Power(float positionX, float positionY, float width, float height, float directionX, float directionY, float speed, int screenWidth, int screenHeight, PowerType power)
-            : base(positionX, positionY, width, height, directionX, directionY, speed)
-        {
+            : base(positionX, positionY, width, height, directionX, directionY, speed) {
             this.ScreenWidth = screenWidth;
             this.ScreenHeight = screenHeight;
             this.PowerType = power;
@@ -65,10 +70,8 @@ namespace BreakOut
         /// Determines whether this instance is out.
         /// </summary>
         /// <returns><c>true</c> if this instance is out; otherwise, <c>false</c>.</returns>
-        public bool isOut()
-        {
-            if (this.Position.Y > this.ScreenHeight)
-            {
+        public bool isOut() {
+            if (this.Position.Y > this.ScreenHeight) {
                 return true;
             }
             return false;
